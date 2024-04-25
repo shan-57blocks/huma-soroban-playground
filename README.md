@@ -1,1 +1,1 @@
-# huma-soroban-playground
+# Huma Soroban Defender
