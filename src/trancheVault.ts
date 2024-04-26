@@ -6,7 +6,7 @@ import { Keypair } from '@stellar/stellar-sdk';
 import { findPoolMetadata, getCustomWallet } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 
-(async () => {
+export const approveLender = async () => {
   const network = Network.Testnet;
   const poolName = 'Arf';
   const poolOwner = Keypair.fromSecret(process.env.POOL_OWNER_SECRET_KEY);
@@ -31,4 +31,6 @@ import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
   } catch (e) {
     console.error('Error', e);
   }
-})();
+};
+
+approveLender();

@@ -25,7 +25,9 @@
     "build": "ts-node scripts/build.ts"
   },
   "dependencies": {
+    "@huma/helloWorld": "./packages/helloWorld",
     "@huma/humaConfig": "./packages/humaConfig",
+    "@huma/increment": "./packages/increment",
     "@huma/pool": "./packages/pool",
     "@huma/poolCredit": "./packages/poolCredit",
     "@huma/poolManager": "./packages/poolManager",
