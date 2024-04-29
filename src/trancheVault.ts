@@ -1,36 +1,33 @@
-import 'dotenv/config';
+import { Address, xdr } from '@stellar/stellar-sdk';
 
-import { Client } from '@huma/trancheVault';
-import { Keypair } from '@stellar/stellar-sdk';
-
-import { findPoolMetadata, getCustomWallet } from './utils/common';
-import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
+import { Accounts, findPoolMetadata } from './utils/common';
+import { Network } from './utils/network';
+import { sendTransaction } from './utils/transaction';
 
 export const approveLender = async () => {
+  // await approveLenderByTranche('juniorTranche');
+  await approveLenderByTranche('seniorTranche');
+};
+
+export const approveLenderByTranche = async (
+  tranche: 'juniorTranche' | 'seniorTranche'
+) => {
   const network = Network.testnet;
   const poolName = 'Arf';
-  const poolOwner = Keypair.fromSecret(process.env.POOL_OWNER_SECRET_KEY);
-  const lender = Keypair.fromSecret(process.env.LENDER_SECRET_KEY);
   const { contracts } = findPoolMetadata(network, poolName);
-
-  const juniorTranche = new Client({
-    contractId: contracts.juniorTranche,
-    publicKey: poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
-    ...getCustomWallet(poolOwner.secret())
-  });
   try {
-    const tx = await juniorTranche.add_approved_lender({
-      caller: poolOwner.publicKey(),
-      lender: lender.publicKey(),
-      reinvest_yield: true
-    });
-    const { result } = await tx.signAndSend();
-    console.log('result', result);
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts[tranche],
+      'add_approved_lender',
+      [
+        Address.fromString(Accounts.poolOwner.publicKey()).toScVal(),
+        Address.fromString(Accounts.lender.publicKey()).toScVal(),
+        xdr.ScVal.scvBool(true)
+      ]
+    );
   } catch (e) {
     console.error('Error', e);
   }
 };
-
-approveLender();

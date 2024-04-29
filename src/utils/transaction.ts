@@ -16,21 +16,23 @@ export const sendTransaction = async (
   method: string,
   params: xdr.ScVal[] = []
 ) => {
-  const sourceKeypair = Keypair.fromSecret(sourceKey);
-  const server = new SorobanRpc.Server(PublicRpcUrl[network]);
-  const contract = new Contract(contractAddress);
-  const sourceAccount = await server.getAccount(sourceKeypair.publicKey());
-  const builtTransaction = new TransactionBuilder(sourceAccount, {
-    fee: BASE_FEE,
-    networkPassphrase: NetworkPassphrase[network]
-  })
-    .addOperation(contract.call(method, ...params))
-    .setTimeout(30)
-    .build();
-  const preparedTransaction = await server.prepareTransaction(builtTransaction);
-  preparedTransaction.sign(sourceKeypair);
-
   try {
+    const sourceKeypair = Keypair.fromSecret(sourceKey);
+    const server = new SorobanRpc.Server(PublicRpcUrl[network]);
+    const contract = new Contract(contractAddress);
+    const sourceAccount = await server.getAccount(sourceKeypair.publicKey());
+    const builtTransaction = new TransactionBuilder(sourceAccount, {
+      fee: BASE_FEE,
+      networkPassphrase: NetworkPassphrase[network]
+    })
+      .addOperation(contract.call(method, ...params))
+      .setTimeout(30)
+      .build();
+    const preparedTransaction = await server.prepareTransaction(
+      builtTransaction
+    );
+    preparedTransaction.sign(sourceKeypair);
+
     const sendResponse = await server.sendTransaction(preparedTransaction);
     if (sendResponse.status === 'PENDING') {
       let getResponse = await server.getTransaction(sendResponse.hash);
