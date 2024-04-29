@@ -64,6 +64,6 @@ export const addPoolOperator = async (operator: string) => {
   }
 };
 
-// getPoolOwner();
+getPoolOwner();
 // isPoolOperator();
 // addPoolOperator(Accounts.borrower.publicKey());

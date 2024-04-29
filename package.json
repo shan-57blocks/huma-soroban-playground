@@ -22,12 +22,11 @@
     "test": "jest --silent",
     "test:coverage": "jest --verbose --coverage",
     "prepare": "husky install",
-    "build": "ts-node scripts/build.ts"
+    "build": "ts-node scripts/build.ts",
+    "tx": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@huma/helloWorld": "./packages/helloWorld",
     "@huma/humaConfig": "./packages/humaConfig",
-    "@huma/increment": "./packages/increment",
     "@huma/pool": "./packages/pool",
     "@huma/poolCredit": "./packages/poolCredit",
     "@huma/poolManager": "./packages/poolManager",

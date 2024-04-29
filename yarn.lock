@@ -343,21 +343,7 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.44.0.tgz#961a5903c74139390478bdc808bcde3fc45ab7af"
   integrity sha512-Ag+9YM4ocKQx9AarydN0KY2j0ErMHNIocPDrVo8zAE44xLTjEtz81OdR68/cydGtk6m6jDb5Za3r2useMzYmSw==
 
-"@huma/helloWorld@./packages/helloWorld":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
 "@huma/humaConfig@./packages/humaConfig":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/increment@./packages/increment":
   version "0.0.0"
   dependencies:
     "@stellar/freighter-api" "2.0.0"
