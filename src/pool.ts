@@ -1,7 +1,6 @@
 import { Client } from '@huma/pool';
-import { Address, nativeToScVal, xdr } from '@stellar/stellar-sdk';
 
-import { Accounts, findPoolMetadata } from './utils/common';
+import { Accounts, findPoolMetadata, ScValType, toScVal } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
@@ -36,13 +35,13 @@ export const setPoolSettings = async () => {
       contracts.pool,
       'set_pool_settings',
       [
-        Address.fromString(Accounts.poolOwner.publicKey()).toScVal(),
-        nativeToScVal(1_000_000_000_000_000, { type: 'u128' }),
-        nativeToScVal(100_000_000, { type: 'u128' }),
-        xdr.ScVal.scvVec([xdr.ScVal.scvSymbol('Monthly')]),
-        nativeToScVal(5, { type: 'u32' }),
-        nativeToScVal(10, { type: 'u32' }),
-        xdr.ScVal.scvBool(true)
+        toScVal(Accounts.poolOwner.publicKey(), ScValType.Address),
+        toScVal(1_000_000_000_000_000, ScValType.U128),
+        toScVal(100_000_000, ScValType.U128),
+        toScVal('Monthly', ScValType.Enum),
+        toScVal(5, ScValType.U32),
+        toScVal(10, ScValType.U32),
+        toScVal(true, ScValType.Bool)
       ]
     );
   } catch (e) {

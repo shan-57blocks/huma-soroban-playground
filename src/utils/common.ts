@@ -1,10 +1,25 @@
 import 'dotenv/config';
 
-import { hash, Keypair, Transaction } from '@stellar/stellar-sdk';
+import {
+  Address,
+  hash,
+  Keypair,
+  nativeToScVal,
+  Transaction,
+  xdr
+} from '@stellar/stellar-sdk';
 
 import { Network, NetworkMetadatas, PoolMetadata } from './network';
 
 export type XDR_BASE64 = string;
+
+export enum ScValType {
+  Address = 'address',
+  U128 = 'u128',
+  U32 = 'u32',
+  Bool = 'bool',
+  Enum = 'enum'
+}
 
 export interface Wallet {
   isConnected: () => Promise<boolean>;
@@ -74,4 +89,30 @@ export const Accounts = {
   deployer: Keypair.fromSecret(process.env.DEPLOYER_SECRET_KEY),
   lender: Keypair.fromSecret(process.env.LENDER_SECRET_KEY),
   borrower: Keypair.fromSecret(process.env.BORROWER_SECRET_KEY)
+};
+
+export const toScVal = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any,
+  type: ScValType
+) => {
+  switch (type) {
+    case ScValType.Address:
+      return Address.fromString(value).toScVal();
+
+    case ScValType.U128:
+      return nativeToScVal(value, { type: ScValType.U128 });
+
+    case ScValType.U32:
+      return nativeToScVal(value, { type: ScValType.U32 });
+
+    case ScValType.Bool:
+      return xdr.ScVal.scvBool(value);
+
+    case ScValType.Enum:
+      return xdr.ScVal.scvVec([xdr.ScVal.scvSymbol(value)]);
+
+    default:
+      break;
+  }
 };
