@@ -35,13 +35,13 @@ export const setPoolSettings = async () => {
       contracts.pool,
       'set_pool_settings',
       [
-        toScVal(Accounts.poolOwner.publicKey(), ScValType.Address),
-        toScVal(1_000_000_000_000_000, ScValType.U128),
-        toScVal(100_000_000, ScValType.U128),
-        toScVal('Monthly', ScValType.Enum),
-        toScVal(5, ScValType.U32),
-        toScVal(10, ScValType.U32),
-        toScVal(true, ScValType.Bool)
+        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+        toScVal(1_000_000_000_000_000, ScValType.u128),
+        toScVal(100_000_000, ScValType.u128),
+        toScVal('Monthly', ScValType.enum),
+        toScVal(5, ScValType.u32),
+        toScVal(10, ScValType.u32),
+        toScVal(true, ScValType.bool)
       ]
     );
   } catch (e) {

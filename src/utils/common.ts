@@ -14,11 +14,11 @@ import { Network, NetworkMetadatas, PoolMetadata } from './network';
 export type XDR_BASE64 = string;
 
 export enum ScValType {
-  Address = 'address',
-  U128 = 'u128',
-  U32 = 'u32',
-  Bool = 'bool',
-  Enum = 'enum'
+  address = 'address',
+  u128 = 'u128',
+  u32 = 'u32',
+  bool = 'bool',
+  enum = 'enum'
 }
 
 export interface Wallet {
@@ -97,19 +97,19 @@ export const toScVal = (
   type: ScValType
 ) => {
   switch (type) {
-    case ScValType.Address:
+    case ScValType.address:
       return Address.fromString(value).toScVal();
 
-    case ScValType.U128:
-      return nativeToScVal(value, { type: ScValType.U128 });
+    case ScValType.u128:
+      return nativeToScVal(value, { type: ScValType.u128 });
 
-    case ScValType.U32:
-      return nativeToScVal(value, { type: ScValType.U32 });
+    case ScValType.u32:
+      return nativeToScVal(value, { type: ScValType.u32 });
 
-    case ScValType.Bool:
+    case ScValType.bool:
       return xdr.ScVal.scvBool(value);
 
-    case ScValType.Enum:
+    case ScValType.enum:
       return xdr.ScVal.scvVec([xdr.ScVal.scvSymbol(value)]);
 
     default:
