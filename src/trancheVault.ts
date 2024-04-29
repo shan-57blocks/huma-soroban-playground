@@ -7,7 +7,7 @@ import { findPoolMetadata, getCustomWallet } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 
 export const approveLender = async () => {
-  const network = Network.Testnet;
+  const network = Network.testnet;
   const poolName = 'Arf';
   const poolOwner = Keypair.fromSecret(process.env.POOL_OWNER_SECRET_KEY);
   const lender = Keypair.fromSecret(process.env.LENDER_SECRET_KEY);
@@ -16,8 +16,8 @@ export const approveLender = async () => {
   const juniorTranche = new Client({
     contractId: contracts.juniorTranche,
     publicKey: poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.Testnet,
-    rpcUrl: PublicRpcUrl.Testnet,
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
     ...getCustomWallet(poolOwner.secret())
   });
   try {

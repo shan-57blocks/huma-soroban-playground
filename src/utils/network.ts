@@ -1,19 +1,19 @@
 export enum Network {
-  Testnet = 'testnet',
-  Futurenet = 'futurenet',
-  Mainnet = 'mainnet'
+  mainnet = 'mainnet',
+  testnet = 'testnet',
+  futurenet = 'futurenet'
 }
 
 export enum NetworkPassphrase {
-  Mainnet = 'Public Global Stellar Network ; September 2015',
-  Futurenet = 'Test SDF Future Network ; October 2022',
-  Testnet = 'Test SDF Network ; September 2015'
+  mainnet = 'Public Global Stellar Network ; September 2015',
+  futurenet = 'Test SDF Future Network ; October 2022',
+  testnet = 'Test SDF Network ; September 2015'
 }
 
 export enum PublicRpcUrl {
-  Mainnet = 'https://horizon.stellar.org',
-  Testnet = 'https://soroban-testnet.stellar.org',
-  Futurenet = 'https://rpc-futurenet.stellar.org'
+  mainnet = 'https://horizon.stellar.org',
+  testnet = 'https://soroban-testnet.stellar.org',
+  futurenet = 'https://rpc-futurenet.stellar.org'
 }
 
 export type PoolMetadata = {
@@ -37,9 +37,9 @@ export type NetworkMetadata = {
 
 export const NetworkMetadatas: NetworkMetadata[] = [
   {
-    network: Network.Testnet,
-    networkPassphrase: NetworkPassphrase.Testnet,
-    rpcUrl: PublicRpcUrl.Testnet,
+    network: Network.testnet,
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
     pools: [
       {
         name: 'Arf',

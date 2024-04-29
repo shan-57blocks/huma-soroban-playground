@@ -1,18 +1,20 @@
 import { Client } from '@huma/poolManager';
+import { Address } from '@stellar/stellar-sdk';
 
 import { Accounts, findPoolMetadata, getCustomWallet } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
+import { sendTransaction } from './utils/transaction';
 
 export const getPoolOwner = async () => {
-  const network = Network.Testnet;
+  const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const poolManager = new Client({
     contractId: contracts.poolManager,
     publicKey: Accounts.lender.publicKey(),
-    networkPassphrase: NetworkPassphrase.Testnet,
-    rpcUrl: PublicRpcUrl.Testnet,
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
     ...getCustomWallet(Accounts.lender.secret())
   });
   try {
@@ -24,15 +26,15 @@ export const getPoolOwner = async () => {
 };
 
 export const isPoolOperator = async () => {
-  const network = Network.Testnet;
+  const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const poolManager = new Client({
     contractId: contracts.poolManager,
     publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.Testnet,
-    rpcUrl: PublicRpcUrl.Testnet
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet
   });
   try {
     const { result } = await poolManager.is_pool_operator({
@@ -44,26 +46,19 @@ export const isPoolOperator = async () => {
   }
 };
 
-export const addPoolOperator = async () => {
-  const network = Network.Testnet;
+export const addPoolOperator = async (operator: string) => {
+  const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
-  console.log('Accounts.deployer.secret()', Accounts.deployer.secret());
-
-  const poolManager = new Client({
-    contractId: contracts.poolManager,
-    publicKey: Accounts.deployer.publicKey(),
-    networkPassphrase: NetworkPassphrase.Testnet,
-    rpcUrl: PublicRpcUrl.Testnet,
-    ...getCustomWallet(Accounts.deployer.secret())
-  });
   try {
-    const tx = await poolManager.add_pool_operator({
-      addr: Accounts.poolOwner.publicKey()
-    });
-    const { result } = await tx.signAndSend();
-    console.log('result', result);
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts.poolManager,
+      'add_pool_operator',
+      [Address.fromString(operator).toScVal()]
+    );
   } catch (e) {
     console.error('Error', e);
   }
@@ -71,4 +66,4 @@ export const addPoolOperator = async () => {
 
 // getPoolOwner();
 // isPoolOperator();
-addPoolOperator();
+// addPoolOperator(Accounts.borrower.publicKey());
