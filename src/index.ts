@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { getUnderlyingToken, setPoolSettings } from './pool';
-import { approveBorrower } from './poolCredit';
-import { approveLender } from './trancheVault';
+import { enablePool } from './poolManager';
 
 (async () => {
-  await getUnderlyingToken();
+  // await getUnderlyingToken();
   // await setPoolSettings();
   //   await approveLender();
   // await approveBorrower();
+  // await drawdown();
+  // await underlyingTokenBalanceOf();
+  // await deposit('seniorTranche');
+  await enablePool();
 })();

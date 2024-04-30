@@ -1,7 +1,13 @@
 import { Client } from '@huma/poolManager';
 import { Address } from '@stellar/stellar-sdk';
 
-import { Accounts, findPoolMetadata, getCustomWallet } from './utils/common';
+import {
+  Accounts,
+  findPoolMetadata,
+  getCustomWallet,
+  ScValType,
+  toScVal
+} from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
@@ -58,6 +64,24 @@ export const addPoolOperator = async (operator: string) => {
       contracts.poolManager,
       'add_pool_operator',
       [Address.fromString(operator).toScVal()]
+    );
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
+export const enablePool = async () => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+
+  try {
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts.poolManager,
+      'enable_pool',
+      [toScVal(Accounts.poolOwner.publicKey(), ScValType.address)]
     );
   } catch (e) {
     console.error('Error', e);

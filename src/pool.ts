@@ -42,6 +42,33 @@ export const getUnderlyingToken = async () => {
   }
 };
 
+export const underlyingTokenBalanceOf = async () => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+
+  const pool = new Client({
+    contractId: contracts.pool,
+    publicKey: Accounts.lender.publicKey(),
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet
+  });
+  try {
+    const { result: underlyingTokenAddress } =
+      await pool.get_underlying_token();
+    const balance = await sendTransaction(
+      Accounts.lender.secret(),
+      network,
+      underlyingTokenAddress,
+      'balance',
+      [toScVal(Accounts.lender.publicKey(), ScValType.address)]
+    );
+    console.log('balance', scValToNative(balance));
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
 export const setPoolSettings = async () => {
   const network = Network.testnet;
   const poolName = 'Arf';
@@ -67,6 +94,3 @@ export const setPoolSettings = async () => {
     console.error('Error', e);
   }
 };
-
-getUnderlyingToken();
-// setPoolSettings();

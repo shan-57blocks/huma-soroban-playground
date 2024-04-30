@@ -1,6 +1,6 @@
 import { Address, xdr } from '@stellar/stellar-sdk';
 
-import { Accounts, findPoolMetadata } from './utils/common';
+import { Accounts, ScValType, findPoolMetadata, toScVal } from './utils/common';
 import { Network } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
@@ -25,6 +25,26 @@ export const approveLenderByTranche = async (
         Address.fromString(Accounts.poolOwner.publicKey()).toScVal(),
         Address.fromString(Accounts.lender.publicKey()).toScVal(),
         xdr.ScVal.scvBool(true)
+      ]
+    );
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
+export const deposit = async (tranche: 'juniorTranche' | 'seniorTranche') => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+  try {
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts[tranche],
+      'deposit',
+      [
+        toScVal(Accounts.lender.publicKey(), ScValType.address),
+        toScVal(100_000_000, ScValType.u128)
       ]
     );
   } catch (e) {
