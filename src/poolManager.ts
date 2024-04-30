@@ -1,17 +1,11 @@
 import { Client } from '@huma/poolManager';
 import { Address } from '@stellar/stellar-sdk';
 
-import {
-  Accounts,
-  findPoolMetadata,
-  getCustomWallet,
-  ScValType,
-  toScVal
-} from './utils/common';
+import { Accounts, findPoolMetadata, ScValType, toScVal } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
-export const getPoolOwner = async () => {
+export const getPoolManagerInfo = async () => {
   const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
@@ -20,36 +14,24 @@ export const getPoolOwner = async () => {
     contractId: contracts.poolManager,
     publicKey: Accounts.lender.publicKey(),
     networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
-    ...getCustomWallet(Accounts.lender.secret())
-  });
-  try {
-    const { result } = await poolManager.get_pool_owner();
-    console.log('result', result);
-  } catch (e) {
-    console.error('Error', e);
-  }
-};
-
-export const isPoolOperator = async () => {
-  const network = Network.testnet;
-  const poolName = 'Arf';
-  const { contracts } = findPoolMetadata(network, poolName);
-
-  const poolManager = new Client({
-    contractId: contracts.poolManager,
-    publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
     rpcUrl: PublicRpcUrl.testnet
   });
-  try {
-    const { result } = await poolManager.is_pool_operator({
+
+  const [
+    { result: poolOwner },
+    { result: poolOwnerTreasury },
+    { result: isPoolOperator }
+  ] = await Promise.all([
+    poolManager.get_pool_owner(),
+    poolManager.get_pool_owner_treasury(),
+    poolManager.is_pool_operator({
       addr: Accounts.poolOwner.publicKey()
-    });
-    console.log('result', result);
-  } catch (e) {
-    console.error('Error', e);
-  }
+    })
+  ]);
+
+  console.log('poolOwner', poolOwner);
+  console.log('poolOwnerTreasury', poolOwnerTreasury);
+  console.log('isPoolOperator', isPoolOperator);
 };
 
 export const addPoolOperator = async (operator: string) => {

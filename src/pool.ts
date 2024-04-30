@@ -42,7 +42,7 @@ export const getUnderlyingToken = async () => {
   }
 };
 
-export const underlyingTokenBalanceOf = async () => {
+export const underlyingTokenBalanceOf = async (account: string) => {
   const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
@@ -61,9 +61,39 @@ export const underlyingTokenBalanceOf = async () => {
       network,
       underlyingTokenAddress,
       'balance',
-      [toScVal(Accounts.lender.publicKey(), ScValType.address)]
+      [toScVal(account, ScValType.address)]
     );
     console.log('balance', scValToNative(balance));
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
+export const underlyingTokenTransfer = async () => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+
+  const pool = new Client({
+    contractId: contracts.pool,
+    publicKey: Accounts.lender.publicKey(),
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet
+  });
+  try {
+    const { result: underlyingTokenAddress } =
+      await pool.get_underlying_token();
+    await sendTransaction(
+      Accounts.deployer.secret(),
+      network,
+      underlyingTokenAddress,
+      'transfer',
+      [
+        toScVal(Accounts.deployer.publicKey(), ScValType.address),
+        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+        toScVal(100_000_000, ScValType.u128)
+      ]
+    );
   } catch (e) {
     console.error('Error', e);
   }
@@ -83,7 +113,7 @@ export const setPoolSettings = async () => {
       [
         toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
         toScVal(1_000_000_000_000_000, ScValType.u128),
-        toScVal(100_000_000, ScValType.u128),
+        toScVal(0, ScValType.u128),
         toScVal('Monthly', ScValType.enum),
         toScVal(5, ScValType.u32),
         toScVal(10, ScValType.u32),
