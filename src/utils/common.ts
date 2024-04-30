@@ -16,6 +16,7 @@ export type XDR_BASE64 = string;
 export enum ScValType {
   address = 'address',
   u128 = 'u128',
+  u64 = 'u64',
   u32 = 'u32',
   bool = 'bool',
   enum = 'enum'
@@ -102,6 +103,9 @@ export const toScVal = (
 
     case ScValType.u128:
       return nativeToScVal(value, { type: ScValType.u128 });
+
+    case ScValType.u64:
+      return nativeToScVal(value, { type: ScValType.u64 });
 
     case ScValType.u32:
       return nativeToScVal(value, { type: ScValType.u32 });
