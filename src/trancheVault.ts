@@ -90,7 +90,7 @@ export const makeInitialDeposit = async (
     const tx = await trancheClient.make_initial_deposit(
       {
         caller: Accounts.poolOwner.publicKey(),
-        assets: 1000000000n
+        assets: 10_0000000n
       },
       {
         timeoutInSeconds: 30

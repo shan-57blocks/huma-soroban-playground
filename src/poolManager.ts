@@ -1,7 +1,7 @@
-import { Client } from '@huma/poolManager';
+import { Client as PoolManagerClient } from '@huma/poolManager';
 import { Address } from '@stellar/stellar-sdk';
 
-import { Accounts, findPoolMetadata, ScValType, toScVal } from './utils/common';
+import { Accounts, findPoolMetadata, getCustomWallet } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
@@ -10,7 +10,7 @@ export const getPoolManagerInfo = async () => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
-  const poolManager = new Client({
+  const poolManagerClient = new PoolManagerClient({
     contractId: contracts.poolManager,
     publicKey: Accounts.lender.publicKey(),
     networkPassphrase: NetworkPassphrase.testnet,
@@ -22,9 +22,9 @@ export const getPoolManagerInfo = async () => {
     { result: poolOwnerTreasury },
     { result: isPoolOperator }
   ] = await Promise.all([
-    poolManager.get_pool_owner(),
-    poolManager.get_pool_owner_treasury(),
-    poolManager.is_pool_operator({
+    poolManagerClient.get_pool_owner(),
+    poolManagerClient.get_pool_owner_treasury(),
+    poolManagerClient.is_pool_operator({
       addr: Accounts.poolOwner.publicKey()
     })
   ]);
@@ -57,14 +57,25 @@ export const enablePool = async () => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
+  const poolManagerClient = new PoolManagerClient({
+    contractId: contracts.poolManager,
+    publicKey: Accounts.poolOwner.publicKey(),
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
+    ...getCustomWallet(Accounts.poolOwner.secret())
+  });
+
   try {
-    await sendTransaction(
-      Accounts.poolOwner.secret(),
-      network,
-      contracts.poolManager,
-      'enable_pool',
-      [toScVal(Accounts.poolOwner.publicKey(), ScValType.address)]
+    const tx = await poolManagerClient.enable_pool(
+      {
+        caller: Accounts.poolOwner.publicKey()
+      },
+      {
+        timeoutInSeconds: 30
+      }
     );
+    const { result } = await tx.signAndSend();
+    console.log('result', result);
   } catch (e) {
     console.error('Error', e);
   }

@@ -87,7 +87,7 @@ export const getUnderlyingToken = async () => {
       symbol: scValToNative(symbol),
       decimals: scValToNative(decimals)
     };
-    console.log(underlyingToken);
+    return underlyingToken;
   } catch (e) {
     console.error('Error', e);
   }
@@ -146,8 +146,8 @@ export const underlyingTokenTransfer = async () => {
     const tx = await underlyingTokenClient.transfer(
       {
         from: Accounts.poolOwner.publicKey(),
-        to: Accounts.lender.publicKey(),
-        amount: 1000_000_000n
+        to: 'CA525T5NVARC4VHMBURM56O7EFMZ4PSMYCOTFTZPHAYQTVD2A35WFEPQ',
+        amount: 100_000_000n
       },
       {
         timeoutInSeconds: 30
@@ -166,6 +166,37 @@ export const setPoolSettings = async () => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
+  const poolClient = new PoolClient({
+    contractId: contracts.pool,
+    publicKey: Accounts.poolOwner.publicKey(),
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
+    ...getCustomWallet(Accounts.poolOwner.secret())
+  });
+
+  // try {
+  //   const tx = await poolClient.set_pool_settings(
+  //     {
+  //       caller: Accounts.poolOwner.publicKey(),
+  //       max_credit_line: 10_000_000_000n,
+  //       min_deposit_amount: 0n,
+  //       // @ts-ignore
+  //       pay_period_duration: 0,
+  //       late_payment_grace_period_days: 5,
+  //       default_grace_period_days: 10,
+  //       principal_only_payment_allowed: true
+  //     },
+  //     {
+  //       timeoutInSeconds: 30
+  //     }
+  //   );
+
+  //   const { result } = await tx.signAndSend();
+  //   console.log('result', result);
+  // } catch (e) {
+  //   console.error('Error', e);
+  // }
+
   try {
     await sendTransaction(
       Accounts.poolOwner.secret(),
@@ -174,8 +205,8 @@ export const setPoolSettings = async () => {
       'set_pool_settings',
       [
         toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
-        toScVal(1_000_000_000_000_000, ScValType.u128),
-        toScVal(0, ScValType.u128),
+        toScVal(10000000000000, ScValType.u128),
+        toScVal(100000000, ScValType.u128),
         toScVal('Monthly', ScValType.enum),
         toScVal(5, ScValType.u32),
         toScVal(10, ScValType.u32),
@@ -194,9 +225,10 @@ export const setLpConfig = async () => {
 
   const poolClient = new PoolClient({
     contractId: contracts.pool,
-    publicKey: Accounts.lender.publicKey(),
+    publicKey: Accounts.poolOwner.publicKey(),
     networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet
+    rpcUrl: PublicRpcUrl.testnet,
+    ...getCustomWallet(Accounts.poolOwner.secret())
   });
   try {
     const tx = await poolClient.set_lp_config(
@@ -207,6 +239,38 @@ export const setLpConfig = async () => {
         fixed_senior_yield_bps: 0,
         tranches_risk_adjustment_bps: 0,
         withdrawal_lockout_period_days: 0
+      },
+      {
+        timeoutInSeconds: 30
+      }
+    );
+
+    const { result } = await tx.signAndSend();
+    console.log('result', result);
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
+export const setFeeStructure = async () => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+
+  const poolClient = new PoolClient({
+    contractId: contracts.pool,
+    publicKey: Accounts.poolOwner.publicKey(),
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
+    ...getCustomWallet(Accounts.poolOwner.secret())
+  });
+  try {
+    const tx = await poolClient.set_fee_structure(
+      {
+        caller: Accounts.poolOwner.publicKey(),
+        yield_bps: 1500,
+        min_principal_rate_bps: 0,
+        late_fee_bps: 100
       },
       {
         timeoutInSeconds: 30
