@@ -32,7 +32,7 @@ if (typeof window !== 'undefined') {
 export const networks = {
   testnet: {
     networkPassphrase: "Test SDF Network ; September 2015",
-    contractId: "CB4PQYTVJY7OVYIXXSOYZI4OKNJDGSE7ZNWUP4KFZXL7CST4ZM2MAW2G",
+    contractId: "CCXBJLHC26VJWNAH2BL6DKBJXIKGQACL2O7H5ZKVX52G47NDOZET6ABG",
   }
 } as const
 
@@ -473,26 +473,6 @@ export interface Client {
     simulate?: boolean;
   }) => Promise<AssembledTransaction<null>>
 
-  /**
-   * Construct and simulate a upgrade transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
-   */
-  upgrade: ({new_wasm_hash}: {new_wasm_hash: Buffer}, options?: {
-    /**
-     * The fee to pay for the transaction. Default: BASE_FEE
-     */
-    fee?: number;
-
-    /**
-     * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
-     */
-    timeoutInSeconds?: number;
-
-    /**
-     * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
-     */
-    simulate?: boolean;
-  }) => Promise<AssembledTransaction<null>>
-
 }
 export class Client extends ContractClient {
   constructor(public readonly options: ContractClientOptions) {
@@ -513,7 +493,6 @@ export class Client extends ContractClient {
         "AAAAAAAAAAAAAAATc2V0X2xpcXVpZGl0eV9hc3NldAAAAAACAAAAAAAAAARhZGRyAAAAEwAAAAAAAAAFdmFsaWQAAAAAAAABAAAAAA==",
         "AAAAAAAAAAAAAAAUZ2V0X3Byb3RvY29sX2ZlZV9icHMAAAAAAAAAAQAAAAQ=",
         "AAAAAAAAAAAAAAAUc2V0X3Byb3RvY29sX2ZlZV9icHMAAAABAAAAAAAAAAdmZWVfYnBzAAAAAAQAAAAA",
-        "AAAAAAAAAAAAAAAHdXBncmFkZQAAAAABAAAAAAAAAA1uZXdfd2FzbV9oYXNoAAAAAAAD7gAAACAAAAAA",
         "AAAABAAAAAAAAAAAAAAABUVycm9yAAAAAAAAAwAAAAAAAAAaQ29udHJhY3RBbHJlYWR5SW5pdGlhbGl6ZWQAAAAAAAEAAAAAAAAADlBhdXNlclJlcXVpcmVkAAAAAAACAAAAAAAAAB9Qcm90b2NvbEZlZUhpZ2hlclRoYW5VcHBlckxpbWl0AAAAAAM=",
         "AAAAAgAAAAAAAAAAAAAAEUh1bWFDb25maWdEYXRhS2V5AAAAAAAABwAAAAAAAAAAAAAACUh1bWFPd25lcgAAAAAAAAAAAAAAAAAADEh1bWFUcmVhc3VyeQAAAAAAAAAAAAAACFNlbnRpbmVsAAAAAAAAAAAAAAAQUHJvdG9jb2xGZWVJbkJwcwAAAAAAAAAAAAAACElzUGF1c2VkAAAAAQAAAAAAAAAGUGF1c2VyAAAAAAABAAAAEwAAAAEAAAAAAAAAE1ZhbGlkTGlxdWlkaXR5QXNzZXQAAAAAAQAAABM=",
         "AAAAAQAAAOJUaGUgSHVtYSBwcm90b2NvbCBoYXMgYmVlbiBpbml0aWFsaXplZC4KIyBGaWVsZHMKKiBgaHVtYV9vd25lcmAgLSBUaGUgYWRkcmVzcyBvZiB0aGUgSHVtYSBvd25lciBhY2NvdW50LgoqIGBodW1hX3RyZWFzdXJ5YCAtIFRoZSBhZGRyZXNzIG9mIHRoZSBIdW1hIHRyZWFzdXJ5IGFjY291bnQuCiogYHNlbnRpbmVsYCAtIFRoZSBhZGRyZXNzIG9mIHRoZSBTZW50aW5lbCBzZXJ2aWNlIGFjY291bnQuAAAAAAAAAAAAGFByb3RvY29sSW5pdGlhbGl6ZWRFdmVudAAAAAMAAAAAAAAACmh1bWFfb3duZXIAAAAAABMAAAAAAAAADWh1bWFfdHJlYXN1cnkAAAAAAAATAAAAAAAAAAhzZW50aW5lbAAAABM=",
@@ -545,7 +524,6 @@ export class Client extends ContractClient {
         is_asset_valid: this.txFromJSON<boolean>,
         set_liquidity_asset: this.txFromJSON<null>,
         get_protocol_fee_bps: this.txFromJSON<u32>,
-        set_protocol_fee_bps: this.txFromJSON<null>,
-        upgrade: this.txFromJSON<null>
+        set_protocol_fee_bps: this.txFromJSON<null>
   }
 }

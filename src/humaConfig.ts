@@ -3,6 +3,11 @@ import { Accounts, findPoolMetadata } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
+export const getProtocolInfo = async () => {
+  const protocolPaused = await isProtocolPaused();
+  console.log('protocolPaused', protocolPaused);
+};
+
 export const isProtocolPaused = async () => {
   const network = Network.testnet;
   const poolName = 'Arf';
@@ -16,7 +21,7 @@ export const isProtocolPaused = async () => {
   });
   try {
     const { result } = await humaConfig.is_protocol_paused();
-    console.log(result);
+    return result;
   } catch (e) {
     console.error('Error', e);
   }

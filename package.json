@@ -23,7 +23,8 @@
     "test:coverage": "jest --verbose --coverage",
     "prepare": "husky install",
     "build": "ts-node scripts/build.ts",
-    "tx": "ts-node src/index.ts"
+    "tx": "ts-node src/index.ts",
+    "binding": "ts-node scripts/bindings.ts"
   },
   "dependencies": {
     "@huma/humaConfig": "./packages/humaConfig",
@@ -31,6 +32,7 @@
     "@huma/poolCredit": "./packages/poolCredit",
     "@huma/poolManager": "./packages/poolManager",
     "@huma/trancheVault": "./packages/trancheVault",
+    "@huma/underlyingToken": "./packages/underlyingToken",
     "@stellar/stellar-sdk": "^11.3.0",
     "axios": "^1.4.0",
     "dotenv": "^8.2.0",

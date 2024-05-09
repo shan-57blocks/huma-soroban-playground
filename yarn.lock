@@ -378,6 +378,13 @@
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
+"@huma/underlyingToken@./packages/underlyingToken":
+  version "0.0.0"
+  dependencies:
+    "@stellar/freighter-api" "2.0.0"
+    "@stellar/stellar-sdk" "11.3.0"
+    buffer "6.0.3"
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"
