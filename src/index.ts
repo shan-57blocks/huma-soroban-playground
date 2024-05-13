@@ -8,7 +8,11 @@ import {
   underlyingTokenBalanceOf,
   underlyingTokenTransfer
 } from './pool';
-import { enablePool, getPoolManagerInfo } from './poolManager';
+import {
+  enablePool,
+  getPoolManagerInfo,
+  getPoolOwnerMinLiquidityReq
+} from './poolManager';
 import { Accounts } from './utils/common';
 import { approveLender, deposit, makeInitialDeposit } from './trancheVault';
 import {
@@ -20,15 +24,14 @@ import { approveToken, getAllowance } from './token';
 
 (async () => {
   // await getUnderlyingToken();
-  // await setPoolSettings();
   // await setFeeStructure();
   // await approveLender();
   // await approveBorrower();
   // await drawdown();
   // await underlyingTokenTransfer();
-  await underlyingTokenBalanceOf(
-    'CA525T5NVARC4VHMBURM56O7EFMZ4PSMYCOTFTZPHAYQTVD2A35WFEPQ'
-  );
+  // await underlyingTokenBalanceOf(
+  //   'CA525T5NVARC4VHMBURM56O7EFMZ4PSMYCOTFTZPHAYQTVD2A35WFEPQ'
+  // );
   // await unpauseProtocol();
   // await deposit('lender', 'juniorTranche');
   // await enablePool();
@@ -39,5 +42,7 @@ import { approveToken, getAllowance } from './token';
   // await setLpConfig();
   // await approveToken();
   // await getAllowance();
-  // await makeInitialDeposit('juniorTranche');
+  // await setPoolSettings();
+  await makeInitialDeposit('juniorTranche');
+  // await getPoolOwnerMinLiquidityReq();
 })();

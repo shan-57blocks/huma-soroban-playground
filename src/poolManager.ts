@@ -1,7 +1,13 @@
 import { Client as PoolManagerClient } from '@huma/poolManager';
 import { Address } from '@stellar/stellar-sdk';
 
-import { Accounts, findPoolMetadata, getCustomWallet } from './utils/common';
+import {
+  Accounts,
+  ScValType,
+  findPoolMetadata,
+  getCustomWallet,
+  toScVal
+} from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction } from './utils/transaction';
 
@@ -76,6 +82,24 @@ export const enablePool = async () => {
     );
     const { result } = await tx.signAndSend();
     console.log('result', result);
+  } catch (e) {
+    console.error('Error', e);
+  }
+};
+
+export const getPoolOwnerMinLiquidityReq = async () => {
+  const network = Network.testnet;
+  const poolName = 'Arf';
+  const { contracts } = findPoolMetadata(network, poolName);
+
+  try {
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts.poolManager,
+      'get_pool_owner_min_liquidity_req',
+      [toScVal(0, ScValType.u32)]
+    );
   } catch (e) {
     console.error('Error', e);
   }

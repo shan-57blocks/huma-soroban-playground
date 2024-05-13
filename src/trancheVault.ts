@@ -8,7 +8,7 @@ import {
   toScVal
 } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
-import { sendTransaction } from './utils/transaction';
+import { sendTransaction, simTransaction } from './utils/transaction';
 
 export const approveLender = async () => {
   await approveLenderByTranche('juniorTranche');
@@ -86,34 +86,35 @@ export const makeInitialDeposit = async (
     ...getCustomWallet(Accounts.poolOwner.secret())
   });
 
-  try {
-    const tx = await trancheClient.make_initial_deposit(
-      {
-        caller: Accounts.poolOwner.publicKey(),
-        assets: 10_0000000n
-      },
-      {
-        timeoutInSeconds: 30
-      }
-    );
-    const { result } = await tx.signAndSend();
-    console.log('result', result);
-  } catch (e) {
-    console.error('Error', e);
-  }
-
   // try {
-  //   await sendTransaction(
-  //     Accounts.poolOwner.secret(),
-  //     network,
-  //     contracts[tranche],
-  //     'make_initial_deposit',
-  //     [
-  //       toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
-  //       toScVal(100_000_000, ScValType.u128)
-  //     ]
+  //   const tx = await trancheClient.make_initial_deposit(
+  //     {
+  //       caller: Accounts.poolOwner.publicKey(),
+  //       assets: 10_0000000n
+  //     },
+  //     {
+  //       timeoutInSeconds: 30,
+  //       simulate: true
+  //     }
   //   );
+  //   const { result } = await tx.signAndSend();
+  //   console.log('result', result);
   // } catch (e) {
   //   console.error('Error', e);
   // }
+
+  try {
+    await sendTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts[tranche],
+      'make_initial_deposit',
+      [
+        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+        toScVal(100_000_000, ScValType.u128)
+      ]
+    );
+  } catch (e) {
+    console.error('Error', e);
+  }
 };

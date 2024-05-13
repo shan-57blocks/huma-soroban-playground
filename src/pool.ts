@@ -1,4 +1,4 @@
-import { Client as PoolClient } from '@huma/pool';
+import { PayPeriodDuration, Client as PoolClient } from '@huma/pool';
 import { Client as UnderlyingTokenClient } from '@huma/underlyingToken';
 import { scValToNative } from '@stellar/stellar-sdk';
 
@@ -174,48 +174,51 @@ export const setPoolSettings = async () => {
     ...getCustomWallet(Accounts.poolOwner.secret())
   });
 
-  // try {
-  //   const tx = await poolClient.set_pool_settings(
-  //     {
-  //       caller: Accounts.poolOwner.publicKey(),
-  //       max_credit_line: 10_000_000_000n,
-  //       min_deposit_amount: 0n,
-  //       // @ts-ignore
-  //       pay_period_duration: 0,
-  //       late_payment_grace_period_days: 5,
-  //       default_grace_period_days: 10,
-  //       principal_only_payment_allowed: true
-  //     },
-  //     {
-  //       timeoutInSeconds: 30
-  //     }
-  //   );
-
-  //   const { result } = await tx.signAndSend();
-  //   console.log('result', result);
-  // } catch (e) {
-  //   console.error('Error', e);
-  // }
-
   try {
-    await sendTransaction(
-      Accounts.poolOwner.secret(),
-      network,
-      contracts.pool,
-      'set_pool_settings',
-      [
-        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
-        toScVal(10000000000000, ScValType.u128),
-        toScVal(100000000, ScValType.u128),
-        toScVal('Monthly', ScValType.enum),
-        toScVal(5, ScValType.u32),
-        toScVal(10, ScValType.u32),
-        toScVal(true, ScValType.bool)
-      ]
+    const monthly: PayPeriodDuration = {
+      tag: 'Monthly',
+      values: void 0
+    };
+    const tx = await poolClient.set_pool_settings(
+      {
+        caller: Accounts.poolOwner.publicKey(),
+        max_credit_line: 10000000000000n,
+        min_deposit_amount: 100000000n,
+        pay_period_duration: monthly,
+        late_payment_grace_period_days: 5,
+        default_grace_period_days: 10,
+        principal_only_payment_allowed: true
+      },
+      {
+        timeoutInSeconds: 30
+      }
     );
+
+    const { result } = await tx.signAndSend();
+    console.log('result', result);
   } catch (e) {
     console.error('Error', e);
   }
+
+  // try {
+  //   await sendTransaction(
+  //     Accounts.poolOwner.secret(),
+  //     network,
+  //     contracts.pool,
+  //     'set_pool_settings',
+  //     [
+  //       toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+  //       toScVal(10000000000000, ScValType.u128),
+  //       toScVal(100000000, ScValType.u128),
+  //       toScVal('Monthly', ScValType.enum),
+  //       toScVal(5, ScValType.u32),
+  //       toScVal(10, ScValType.u32),
+  //       toScVal(true, ScValType.bool)
+  //     ]
+  //   );
+  // } catch (e) {
+  //   console.error('Error', e);
+  // }
 };
 
 export const setLpConfig = async () => {

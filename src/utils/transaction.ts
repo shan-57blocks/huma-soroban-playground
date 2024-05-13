@@ -8,6 +8,7 @@ import {
 } from '@stellar/stellar-sdk';
 
 import { Network, NetworkPassphrase, PublicRpcUrl } from './network';
+import { gasReport } from './gasReport';
 
 export const sendTransaction = async (
   sourceKey: string,
@@ -49,5 +50,33 @@ export const sendTransaction = async (
     }
   } else {
     throw sendResponse.errorResult;
+  }
+};
+
+export const simTransaction = async (
+  sourceKey: string,
+  network: Network,
+  contractAddress: string,
+  method: string,
+  params: xdr.ScVal[] = []
+) => {
+  const sourceKeypair = Keypair.fromSecret(sourceKey);
+  const server = new SorobanRpc.Server(PublicRpcUrl[network]);
+  const contract = new Contract(contractAddress);
+  const sourceAccount = await server.getAccount(sourceKeypair.publicKey());
+  const builtTransaction = new TransactionBuilder(sourceAccount, {
+    fee: BASE_FEE,
+    networkPassphrase: NetworkPassphrase[network]
+  })
+    .addOperation(contract.call(method, ...params))
+    .setTimeout(30)
+    .build();
+  const preparedTransaction = await server.prepareTransaction(builtTransaction);
+  preparedTransaction.sign(sourceKeypair);
+
+  const simRes = await server.simulateTransaction(preparedTransaction);
+
+  if (SorobanRpc.Api.isSimulationSuccess(simRes)) {
+    console.log(gasReport(simRes));
   }
 };
