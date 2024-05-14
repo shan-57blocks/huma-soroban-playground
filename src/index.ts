@@ -2,6 +2,7 @@
 import { Account } from '@huma/pool';
 import {
   getPoolInfo,
+  getUnderlyingToken,
   setFeeStructure,
   setLpConfig,
   setPoolSettings,
@@ -9,8 +10,14 @@ import {
   underlyingTokenTransfer
 } from './pool';
 import { enablePool, getPoolManagerInfo } from './poolManager';
-import { Accounts } from './utils/common';
-import { approveLender, deposit, makeInitialDeposit } from './trancheVault';
+import { Accounts, decodeScValString } from './utils/common';
+import {
+  addRedemptionRequest,
+  approveLender,
+  cancelRedemptionRequest,
+  deposit,
+  makeInitialDeposit
+} from './trancheVault';
 import {
   getProtocolInfo,
   isProtocolPaused,
@@ -18,28 +25,42 @@ import {
 } from './humaConfig';
 import { approveToken, getAllowance } from './token';
 import { Network } from './utils/network';
+import { approveBorrower } from './poolCredit';
+import { createChangeTrustTransaction } from './utils/transaction';
 
 (async () => {
-  // await getUnderlyingToken();
+  // await getUnderlyingToken(Network.futurenet);
   // await setFeeStructure();
-  // await approveBorrower();
   // await drawdown();
-  // await underlyingTokenTransfer();
-  // await underlyingTokenBalanceOf(
-  //   'CA525T5NVARC4VHMBURM56O7EFMZ4PSMYCOTFTZPHAYQTVD2A35WFEPQ'
+  // await underlyingTokenTransfer(Network.futurenet);
+  // await createChangeTrustTransaction(
+  //   Network.futurenet,
+  //   Accounts.lender.secret()
   // );
+  await underlyingTokenBalanceOf(
+    Accounts.lender.publicKey(),
+    Network.futurenet
+  );
   // await unpauseProtocol();
-  // await deposit('lender', 'juniorTranche');
   // await getPoolOwnerTreasury();
   // await getPoolManagerInfo();
   // await getProtocolInfo();
-  // await setLpConfig();
+  // await setLpConfig(Network.futurenet);
   // await approveToken();
   // await getAllowance();
   // await getPoolOwnerMinLiquidityReq();
-  // await getPoolInfo();
-  // await enablePool();
-  // await approveLender();
+  // await enablePool(Network.futurenet);
+  // await approveLender(Network.futurenet);
   // await setPoolSettings();
-  await makeInitialDeposit(Network.futurenet, 'juniorTranche');
+  // await makeInitialDeposit(Network.futurenet, 'seniorTranche');
+  // await getPoolInfo(Network.futurenet);
+  // await deposit(Network.futurenet, 'poolOwner', 'juniorTranche');
+  // await addRedemptionRequest(Network.futurenet, 'poolOwner', 'juniorTranche');
+  // await cancelRedemptionRequest(
+  //   Network.futurenet,
+  //   'poolOwner',
+  //   'juniorTranche'
+  // );
+  // await approveBorrower(Network.futurenet);
+  // decodeScValString();
 })();

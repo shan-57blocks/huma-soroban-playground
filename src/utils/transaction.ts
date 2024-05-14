@@ -1,7 +1,9 @@
 import {
+  Asset,
   BASE_FEE,
   Contract,
   Keypair,
+  Operation,
   SorobanRpc,
   TransactionBuilder,
   xdr
@@ -95,3 +97,45 @@ export const simTransaction = async (
     await cmd('prettier --write src/utils/gas.json');
   }
 };
+
+export async function createChangeTrustTransaction(
+  network: Network,
+  sourceKey: string
+) {
+  // We start by converting the asset provided in string format into a Stellar
+  // Asset() object
+  const trustAsset = new Asset(
+    'USDC',
+    'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN'
+  );
+
+  // Next, we setup our transaction by loading the source account from the
+  // network, and initializing the TransactionBuilder.
+  const server = new SorobanRpc.Server(PublicRpcUrl[network]);
+  const sourceKeypair = Keypair.fromSecret(sourceKey);
+  const sourceAccount = await server.getAccount(sourceKeypair.publicKey());
+
+  // Chaning everything together from the `transaction` declaration means we
+  // don't have to assign anything to `builtTransaction` later on. Either
+  // method will have the same results.
+  const transaction = new TransactionBuilder(sourceAccount, {
+    networkPassphrase: NetworkPassphrase[network],
+    fee: '100000'
+  })
+    // Add a single `changeTrust` operation (this controls whether we are
+    // adding, removing, or modifying the account's trustline)
+    .addOperation(
+      Operation.changeTrust({
+        asset: trustAsset
+      })
+    )
+    // Before the transaction can be signed, it requires timebounds
+    .setTimeout(30)
+    // It also must be "built"
+    .build();
+
+  return {
+    transaction: transaction.toXDR(),
+    network_passphrase: NetworkPassphrase[network]
+  };
+}

@@ -12,8 +12,7 @@ import {
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction, simTransaction } from './utils/transaction';
 
-export const getPoolInfo = async () => {
-  const network = Network.testnet;
+export const getPoolInfo = async (network: Network) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
@@ -56,16 +55,15 @@ export const getPoolInfo = async () => {
   console.log('trancheAssets', trancheAssets);
 };
 
-export const getUnderlyingToken = async () => {
-  const network = Network.testnet;
+export const getUnderlyingToken = async (network: Network) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const pool = new PoolClient({
     contractId: contracts.pool,
     publicKey: Accounts.lender.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet
+    networkPassphrase: NetworkPassphrase[network],
+    rpcUrl: PublicRpcUrl[network]
   });
   try {
     const { result: underlyingTokenAddress } =
@@ -87,22 +85,25 @@ export const getUnderlyingToken = async () => {
       symbol: scValToNative(symbol),
       decimals: scValToNative(decimals)
     };
+    console.log('underlyingToken', underlyingToken);
     return underlyingToken;
   } catch (e) {
     console.error('Error', e);
   }
 };
 
-export const underlyingTokenBalanceOf = async (account: string) => {
-  const network = Network.testnet;
+export const underlyingTokenBalanceOf = async (
+  account: string,
+  network: Network
+) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const pool = new PoolClient({
     contractId: contracts.pool,
     publicKey: Accounts.lender.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet
+    networkPassphrase: NetworkPassphrase[network],
+    rpcUrl: PublicRpcUrl[network]
   });
   try {
     const { result: underlyingTokenAddress } =
@@ -120,16 +121,15 @@ export const underlyingTokenBalanceOf = async (account: string) => {
   }
 };
 
-export const underlyingTokenTransfer = async () => {
-  const network = Network.testnet;
+export const underlyingTokenTransfer = async (network: Network) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const poolClient = new PoolClient({
     contractId: contracts.pool,
-    publicKey: Accounts.lender.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet
+    publicKey: Accounts.poolOwner.publicKey(),
+    networkPassphrase: NetworkPassphrase[network],
+    rpcUrl: PublicRpcUrl[network]
   });
   try {
     const { result: underlyingTokenAddress } =
@@ -138,16 +138,16 @@ export const underlyingTokenTransfer = async () => {
     const underlyingTokenClient = new UnderlyingTokenClient({
       contractId: underlyingTokenAddress,
       publicKey: Accounts.poolOwner.publicKey(),
-      networkPassphrase: NetworkPassphrase.testnet,
-      rpcUrl: PublicRpcUrl.testnet,
+      networkPassphrase: NetworkPassphrase[network],
+      rpcUrl: PublicRpcUrl[network],
       ...getCustomWallet(Accounts.poolOwner.secret())
     });
 
     const tx = await underlyingTokenClient.transfer(
       {
         from: Accounts.poolOwner.publicKey(),
-        to: 'CA525T5NVARC4VHMBURM56O7EFMZ4PSMYCOTFTZPHAYQTVD2A35WFEPQ',
-        amount: 100_000_000n
+        to: Accounts.lender.publicKey(),
+        amount: 1000_0000000n
       },
       {
         timeoutInSeconds: 30
@@ -221,23 +221,22 @@ export const setPoolSettings = async () => {
   }
 };
 
-export const setLpConfig = async () => {
-  const network = Network.testnet;
+export const setLpConfig = async (network: Network) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
   const poolClient = new PoolClient({
     contractId: contracts.pool,
     publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
+    networkPassphrase: NetworkPassphrase[network],
+    rpcUrl: PublicRpcUrl[network],
     ...getCustomWallet(Accounts.poolOwner.secret())
   });
   try {
     const tx = await poolClient.set_lp_config(
       {
         caller: Accounts.poolOwner.publicKey(),
-        liquidity_cap: 100000000000000n,
+        liquidity_cap: 3000_0000000n,
         max_senior_junior_ratio: 4,
         fixed_senior_yield_bps: 800,
         tranches_risk_adjustment_bps: 0,

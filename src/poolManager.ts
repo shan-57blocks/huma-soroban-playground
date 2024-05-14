@@ -66,7 +66,7 @@ export const addPoolOperator = async (operator: string) => {
   }
 };
 
-export const enablePool = async () => {
+export const enablePool = async (network: Network) => {
   // const poolManagerClient = getPoolManagerClient(
   //   Accounts.poolOwner.publicKey(),
   //   getCustomWallet(Accounts.poolOwner.secret())
@@ -81,10 +81,9 @@ export const enablePool = async () => {
   // );
   // const { result } = await tx.signAndSend();
 
-  const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
-  await simTransaction(
+  await sendTransaction(
     Accounts.poolOwner.secret(),
     network,
     contracts.poolManager,

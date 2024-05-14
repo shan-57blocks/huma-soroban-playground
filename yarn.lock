@@ -747,6 +747,20 @@
   resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.1.tgz#be0ff90c8a861d6e1101bca130fa20e74d5599bb"
   integrity sha512-3gnPjAz78htgqsNEDkEsKHKosV2BF2iZkoHCNxpmZwUxiPsw+2VaXMed8RRMe0rGk3d5GZe7RrSba8zV80J3Ag==
 
+"@stellar/stellar-base@11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-11.1.0.tgz#4b561776cb102a87828379cd1ac5d3ce96db4fb3"
+  integrity sha512-nMg7QSpFqCZFq3Je/lG12+DY18y01QHRNyCxvjM8i4myS9tPRMDq7zqGcd215BGbCJxenckiOW45YJjQjzdcMQ==
+  dependencies:
+    "@stellar/js-xdr" "^3.1.1"
+    base32.js "^0.1.0"
+    bignumber.js "^9.1.2"
+    buffer "^6.0.3"
+    sha.js "^2.3.6"
+    tweetnacl "^1.0.3"
+  optionalDependencies:
+    sodium-native "^4.1.1"
+
 "@stellar/stellar-base@^11.0.1":
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-11.0.1.tgz#f6eba54e62aa3e827e55d8338b92cdbf5535cfd9"
@@ -761,12 +775,25 @@
   optionalDependencies:
     sodium-native "^4.0.10"
 
-"@stellar/stellar-sdk@11.3.0", "@stellar/stellar-sdk@^11.3.0":
+"@stellar/stellar-sdk@11.3.0":
   version "11.3.0"
   resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-11.3.0.tgz#7cb010651846a07e1853e0fe30e430ece4da340b"
   integrity sha512-i+heopibJNRA7iM8rEPz0AXphBPYvy2HDo8rxbDwWpozwCfw8kglP9cLkkhgJe8YicgLrdExz/iQZaLpqLC+6w==
   dependencies:
     "@stellar/stellar-base" "^11.0.1"
+    axios "^1.6.8"
+    bignumber.js "^9.1.2"
+    eventsource "^2.0.2"
+    randombytes "^2.1.0"
+    toml "^3.0.0"
+    urijs "^1.19.1"
+
+"@stellar/stellar-sdk@^12.0.0-rc.2":
+  version "12.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-12.0.0-rc.2.tgz#ff467151c825b4a80c9762982d82c7f47f870eeb"
+  integrity sha512-Pj6eBP0doe3yoLa5rhAgDDd+AVSTRKmJFDcnr7LBXt5RzF2P7txpEZ1ZhWG5IggWzJKc/x83zUzOuOfyIglhdA==
+  dependencies:
+    "@stellar/stellar-base" "11.1.0"
     axios "^1.6.8"
     bignumber.js "^9.1.2"
     eventsource "^2.0.2"
@@ -3558,7 +3585,7 @@ sodium-native@^2.3.0:
     nan "^2.14.0"
     node-gyp-build "^4.1.0"
 
-sodium-native@^4.0.10:
+sodium-native@^4.0.10, sodium-native@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/sodium-native/-/sodium-native-4.1.1.tgz#109bc924dd55c13db87c6dd30da047487595723c"
   integrity sha512-LXkAfRd4FHtkQS4X6g+nRcVaN7mWVNepV06phIsC6+IZFvGh1voW5TNQiQp2twVaMf05gZqQjuS+uWLM6gHhNQ==

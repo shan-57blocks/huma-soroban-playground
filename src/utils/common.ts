@@ -4,9 +4,11 @@ import 'dotenv/config';
 
 import {
   Address,
+  Asset,
   hash,
   Keypair,
   nativeToScVal,
+  scValToNative,
   Transaction,
   xdr
 } from '@stellar/stellar-sdk';
@@ -142,4 +144,16 @@ export const cmd = async (command: string) => {
   };
 
   return internalCmd('bash', '-c', command);
+};
+
+export const decodeScValString = () => {
+  const buffer = [
+    116, 114, 97, 110, 115, 97, 99, 116, 105, 111, 110, 32, 98, 121, 116, 101,
+    45, 114, 101, 97, 100, 32, 114, 101, 115, 111, 117, 114, 99, 101, 115, 32,
+    101, 120, 99, 101, 101, 100, 32, 110, 101, 116, 119, 111, 114, 107, 32, 99,
+    111, 110, 102, 105, 103, 32, 108, 105, 109, 105, 116
+  ];
+
+  const text = scValToNative(xdr.ScVal.scvString(Buffer.from(buffer)));
+  console.log('text', text);
 };
