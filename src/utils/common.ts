@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import 'dotenv/config';
 
 import {
@@ -8,6 +10,8 @@ import {
   Transaction,
   xdr
 } from '@stellar/stellar-sdk';
+import { spawn } from 'child_process';
+import process from 'process';
 
 import { Network, NetworkMetadatas, PoolMetadata } from './network';
 
@@ -119,4 +123,23 @@ export const toScVal = (
     default:
       break;
   }
+};
+
+export const cmd = async (command: string) => {
+  const internalCmd = (...command: string[]) => {
+    const p = spawn(command[0], command.slice(1));
+    return new Promise((resolveFunc) => {
+      p.stdout.on('data', (x: any) => {
+        resolveFunc(x.toString().replace(/\W/g, ''));
+      });
+      p.stderr.on('data', (x: any) => {
+        // process.stderr.write(x.toString());
+      });
+      p.on('exit', (code: any) => {
+        resolveFunc(code);
+      });
+    });
+  };
+
+  return internalCmd('bash', '-c', command);
 };

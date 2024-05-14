@@ -7,8 +7,11 @@ import {
   xdr
 } from '@stellar/stellar-sdk';
 
+import fs from 'fs';
+
 import { Network, NetworkPassphrase, PublicRpcUrl } from './network';
 import { gasReport } from './gasReport';
+import { cmd } from './common';
 
 export const sendTransaction = async (
   sourceKey: string,
@@ -77,6 +80,18 @@ export const simTransaction = async (
   const simRes = await server.simulateTransaction(preparedTransaction);
 
   if (SorobanRpc.Api.isSimulationSuccess(simRes)) {
+    const path = `${process.cwd()}/src/utils/gas.json`;
+    const report = gasReport(simRes);
+    const gas = JSON.parse(
+      fs.readFileSync(path, {
+        encoding: 'utf-8'
+      }) || '{}'
+    );
+
+    // @ts-ignore
+    gas[method] = report;
+    fs.writeFileSync(path, JSON.stringify(gas));
     console.log(gasReport(simRes));
+    await cmd('prettier --write src/utils/gas.json');
   }
 };

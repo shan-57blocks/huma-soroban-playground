@@ -3,25 +3,33 @@ import { Address } from '@stellar/stellar-sdk';
 
 import {
   Accounts,
-  ScValType,
   findPoolMetadata,
   getCustomWallet,
-  toScVal
+  ScValType,
+  toScVal,
+  Wallet
 } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
-import { sendTransaction } from './utils/transaction';
+import { sendTransaction, simTransaction } from './utils/transaction';
 
-export const getPoolManagerInfo = async () => {
+export const getPoolManagerClient = (sender: string, wallet?: Wallet) => {
   const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
-  const poolManagerClient = new PoolManagerClient({
+  return new PoolManagerClient({
     contractId: contracts.poolManager,
-    publicKey: Accounts.lender.publicKey(),
+    publicKey: sender,
     networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet
+    rpcUrl: PublicRpcUrl.testnet,
+    ...(wallet || {})
   });
+};
+
+export const getPoolManagerInfo = async () => {
+  const poolManagerClient = getPoolManagerClient(
+    Accounts.poolOwner.publicKey()
+  );
 
   const [
     { result: poolOwner },
@@ -59,48 +67,28 @@ export const addPoolOperator = async (operator: string) => {
 };
 
 export const enablePool = async () => {
+  // const poolManagerClient = getPoolManagerClient(
+  //   Accounts.poolOwner.publicKey(),
+  //   getCustomWallet(Accounts.poolOwner.secret())
+  // );
+  // const tx = await poolManagerClient.enable_pool(
+  //   {
+  //     caller: Accounts.poolOwner.publicKey()
+  //   },
+  //   {
+  //     timeoutInSeconds: 30
+  //   }
+  // );
+  // const { result } = await tx.signAndSend();
+
   const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
-
-  const poolManagerClient = new PoolManagerClient({
-    contractId: contracts.poolManager,
-    publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
-    ...getCustomWallet(Accounts.poolOwner.secret())
-  });
-
-  try {
-    const tx = await poolManagerClient.enable_pool(
-      {
-        caller: Accounts.poolOwner.publicKey()
-      },
-      {
-        timeoutInSeconds: 30
-      }
-    );
-    const { result } = await tx.signAndSend();
-    console.log('result', result);
-  } catch (e) {
-    console.error('Error', e);
-  }
-};
-
-export const getPoolOwnerMinLiquidityReq = async () => {
-  const network = Network.testnet;
-  const poolName = 'Arf';
-  const { contracts } = findPoolMetadata(network, poolName);
-
-  try {
-    await sendTransaction(
-      Accounts.poolOwner.secret(),
-      network,
-      contracts.poolManager,
-      'get_pool_owner_min_liquidity_req',
-      [toScVal(0, ScValType.u32)]
-    );
-  } catch (e) {
-    console.error('Error', e);
-  }
+  await simTransaction(
+    Accounts.poolOwner.secret(),
+    network,
+    contracts.poolManager,
+    'enable_pool',
+    [toScVal(Accounts.poolOwner.publicKey(), ScValType.address)]
+  );
 };

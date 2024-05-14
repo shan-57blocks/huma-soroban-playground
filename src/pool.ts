@@ -10,7 +10,7 @@ import {
   getCustomWallet
 } from './utils/common';
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
-import { sendTransaction } from './utils/transaction';
+import { sendTransaction, simTransaction } from './utils/transaction';
 
 export const getPoolInfo = async () => {
   const network = Network.testnet;
@@ -166,59 +166,59 @@ export const setPoolSettings = async () => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
-  const poolClient = new PoolClient({
-    contractId: contracts.pool,
-    publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
-    ...getCustomWallet(Accounts.poolOwner.secret())
-  });
-
-  try {
-    const monthly: PayPeriodDuration = {
-      tag: 'Monthly',
-      values: void 0
-    };
-    const tx = await poolClient.set_pool_settings(
-      {
-        caller: Accounts.poolOwner.publicKey(),
-        max_credit_line: 10000000000000n,
-        min_deposit_amount: 100000000n,
-        pay_period_duration: monthly,
-        late_payment_grace_period_days: 5,
-        default_grace_period_days: 10,
-        principal_only_payment_allowed: true
-      },
-      {
-        timeoutInSeconds: 30
-      }
-    );
-
-    const { result } = await tx.signAndSend();
-    console.log('result', result);
-  } catch (e) {
-    console.error('Error', e);
-  }
+  // const poolClient = new PoolClient({
+  //   contractId: contracts.pool,
+  //   publicKey: Accounts.poolOwner.publicKey(),
+  //   networkPassphrase: NetworkPassphrase.testnet,
+  //   rpcUrl: PublicRpcUrl.testnet,
+  //   ...getCustomWallet(Accounts.poolOwner.secret())
+  // });
 
   // try {
-  //   await sendTransaction(
-  //     Accounts.poolOwner.secret(),
-  //     network,
-  //     contracts.pool,
-  //     'set_pool_settings',
-  //     [
-  //       toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
-  //       toScVal(10000000000000, ScValType.u128),
-  //       toScVal(100000000, ScValType.u128),
-  //       toScVal('Monthly', ScValType.enum),
-  //       toScVal(5, ScValType.u32),
-  //       toScVal(10, ScValType.u32),
-  //       toScVal(true, ScValType.bool)
-  //     ]
+  //   const monthly: PayPeriodDuration = {
+  //     tag: 'Monthly',
+  //     values: void 0
+  //   };
+  //   const tx = await poolClient.set_pool_settings(
+  //     {
+  //       caller: Accounts.poolOwner.publicKey(),
+  //       max_credit_line: 10000000000000n,
+  //       min_deposit_amount: 100000000n,
+  //       pay_period_duration: monthly,
+  //       late_payment_grace_period_days: 5,
+  //       default_grace_period_days: 10,
+  //       principal_only_payment_allowed: true
+  //     },
+  //     {
+  //       timeoutInSeconds: 30
+  //     }
   //   );
+
+  //   const { result } = await tx.signAndSend();
+  //   console.log('result', result);
   // } catch (e) {
   //   console.error('Error', e);
   // }
+
+  try {
+    await simTransaction(
+      Accounts.poolOwner.secret(),
+      network,
+      contracts.pool,
+      'set_pool_settings',
+      [
+        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+        toScVal(10000000000000, ScValType.u128),
+        toScVal(100000000, ScValType.u128),
+        toScVal('Monthly', ScValType.enum),
+        toScVal(5, ScValType.u32),
+        toScVal(10, ScValType.u32),
+        toScVal(true, ScValType.bool)
+      ]
+    );
+  } catch (e) {
+    console.error('Error', e);
+  }
 };
 
 export const setLpConfig = async () => {
@@ -237,9 +237,9 @@ export const setLpConfig = async () => {
     const tx = await poolClient.set_lp_config(
       {
         caller: Accounts.poolOwner.publicKey(),
-        liquidity_cap: 100_000_000_000n,
+        liquidity_cap: 100000000000000n,
         max_senior_junior_ratio: 4,
-        fixed_senior_yield_bps: 0,
+        fixed_senior_yield_bps: 800,
         tranches_risk_adjustment_bps: 0,
         withdrawal_lockout_period_days: 0
       },

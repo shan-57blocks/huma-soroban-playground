@@ -34,7 +34,7 @@ export const approveLenderByTranche = async (
     const tx = await trancheClient.add_approved_lender(
       {
         caller: Accounts.poolOwner.publicKey(),
-        lender: Accounts.lender.publicKey(),
+        lender: Accounts.poolOwner.publicKey(),
         reinvest_yield: true
       },
       {
@@ -72,19 +72,30 @@ export const deposit = async (
 };
 
 export const makeInitialDeposit = async (
+  network: Network,
   tranche: 'juniorTranche' | 'seniorTranche'
 ) => {
-  const network = Network.testnet;
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
 
-  const trancheClient = new Client({
-    contractId: contracts[tranche],
-    publicKey: Accounts.poolOwner.publicKey(),
-    networkPassphrase: NetworkPassphrase[network],
-    rpcUrl: PublicRpcUrl[network],
-    ...getCustomWallet(Accounts.poolOwner.secret())
-  });
+  await simTransaction(
+    Accounts.poolOwner.secret(),
+    network,
+    contracts[tranche],
+    'make_initial_deposit',
+    [
+      toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
+      toScVal(5000_000_000, ScValType.u128)
+    ]
+  );
+
+  // const trancheClient = new Client({
+  //   contractId: contracts[tranche],
+  //   publicKey: Accounts.poolOwner.publicKey(),
+  //   networkPassphrase: NetworkPassphrase[network],
+  //   rpcUrl: PublicRpcUrl[network],
+  //   ...getCustomWallet(Accounts.poolOwner.secret())
+  // });
 
   // try {
   //   const tx = await trancheClient.make_initial_deposit(
@@ -102,19 +113,4 @@ export const makeInitialDeposit = async (
   // } catch (e) {
   //   console.error('Error', e);
   // }
-
-  try {
-    await sendTransaction(
-      Accounts.poolOwner.secret(),
-      network,
-      contracts[tranche],
-      'make_initial_deposit',
-      [
-        toScVal(Accounts.poolOwner.publicKey(), ScValType.address),
-        toScVal(100_000_000, ScValType.u128)
-      ]
-    );
-  } catch (e) {
-    console.error('Error', e);
-  }
 };
