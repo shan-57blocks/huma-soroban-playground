@@ -76,11 +76,11 @@ export const simTransaction = async (
     .addOperation(contract.call(method, ...params))
     .setTimeout(30)
     .build();
-  const preparedTransaction = await server.prepareTransaction(builtTransaction);
-  preparedTransaction.sign(sourceKeypair);
+  // const preparedTransaction = await server.prepareTransaction(builtTransaction);
+  // preparedTransaction.sign(sourceKeypair);
 
-  const simRes = await server.simulateTransaction(preparedTransaction);
-
+  const simRes = await server.simulateTransaction(builtTransaction);
+  console.log('simRes', simRes);
   if (SorobanRpc.Api.isSimulationSuccess(simRes)) {
     const path = `${process.cwd()}/src/utils/gas.json`;
     const report = gasReport(simRes);

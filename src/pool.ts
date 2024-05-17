@@ -12,6 +12,15 @@ import {
 import { Network, NetworkPassphrase, PublicRpcUrl } from './utils/network';
 import { sendTransaction, simTransaction } from './utils/transaction';
 
+import { Contract } from '@stellar/stellar-sdk';
+
+export const getLpConfig = async () => {
+  const poolName = 'Arf';
+  const network = Network.testnet;
+  const { contracts } = findPoolMetadata(network, poolName);
+  const instance = new Contract(contracts.pool).getFootprint();
+};
+
 export const getPoolInfo = async (network: Network) => {
   const poolName = 'Arf';
   const { contracts } = findPoolMetadata(network, poolName);
@@ -108,14 +117,14 @@ export const underlyingTokenBalanceOf = async (
   try {
     const { result: underlyingTokenAddress } =
       await pool.get_underlying_token();
-    const balance = await sendTransaction(
+    const balance = await simTransaction(
       Accounts.lender.secret(),
       network,
       underlyingTokenAddress,
       'balance',
       [toScVal(account, ScValType.address)]
     );
-    console.log('balance', Number(scValToNative(balance)) / 10000000);
+    // console.log('balance', Number(scValToNative(balance)) / 10000000);
   } catch (e) {
     console.error('Error', e);
   }

@@ -60,13 +60,23 @@
     "max_key_bytes": 132
   },
   "approve_borrower": {
-    "cpu_insns": 20330951,
-    "mem_bytes": 9955707,
-    "entry_reads": 8,
-    "entry_writes": 3,
-    "read_bytes": 143500,
-    "write_bytes": 988,
+    "cpu_insns": 20842641,
+    "mem_bytes": 9986355,
+    "entry_reads": 9,
+    "entry_writes": 4,
+    "read_bytes": 143644,
+    "write_bytes": 1064,
     "events_and_return_bytes": 484,
     "max_key_bytes": 116
+  },
+  "balance": {
+    "cpu_insns": 142538,
+    "mem_bytes": 41800,
+    "entry_reads": 2,
+    "entry_writes": 0,
+    "read_bytes": 592,
+    "write_bytes": 0,
+    "events_and_return_bytes": 20,
+    "max_key_bytes": 84
   }
 }
