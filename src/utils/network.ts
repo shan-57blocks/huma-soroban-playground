@@ -1,19 +1,22 @@
 export enum Network {
-  mainnet = 'mainnet',
   testnet = 'testnet',
-  futurenet = 'futurenet'
+  mainnet = 'mainnet',
+  futurenet = 'futurenet',
+  localnet = 'localnet'
 }
 
 export enum NetworkPassphrase {
   mainnet = 'Public Global Stellar Network ; September 2015',
+  testnet = 'Test SDF Network ; September 2015',
   futurenet = 'Test SDF Future Network ; October 2022',
-  testnet = 'Test SDF Network ; September 2015'
+  localnet = 'Standalone Network ; February 2017'
 }
 
 export enum PublicRpcUrl {
   mainnet = 'https://horizon.stellar.org',
   testnet = 'https://soroban-testnet.stellar.org',
-  futurenet = 'https://rpc-futurenet.stellar.org'
+  futurenet = 'https://rpc-futurenet.stellar.org',
+  localnet = 'http://localhost:8000/soroban/rpc'
 }
 
 export type PoolMetadata = {
