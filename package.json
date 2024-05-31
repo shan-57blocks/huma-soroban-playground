@@ -24,7 +24,8 @@
     "prepare": "husky install",
     "build": "ts-node scripts/build.ts",
     "tx": "ts-node src/index.ts",
-    "binding": "ts-node scripts/bindings.ts"
+    "binding": "ts-node scripts/bindings.ts",
+    "ttl": "ts-node src/extendTTL.ts"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
