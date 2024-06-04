@@ -22,10 +22,20 @@ import {
   const sequence = await server
     .getLatestLedger()
     .then(({ sequence }) => sequence);
+  console.log('sequence', sequence);
   const le = await server.getLedgerEntries(instance);
+  console.log(
+    'le.entries[0].liveUntilLedgerSeq',
+    le.entries[0].liveUntilLedgerSeq
+  );
+
   console.log('signer.publicKey()', signer.publicKey());
   const account = await server.getAccount(signer.publicKey());
-  console.log(5555, sequence);
+  console.log(5555, le.entries[0].liveUntilLedgerSeq);
+  console.log(
+    'sequence + (3110400 - (le.entries[0].liveUntilLedgerSeq! - sequence))',
+    sequence + (3110400 - (le.entries[0].liveUntilLedgerSeq! - sequence))
+  );
   const restoreTx = new TransactionBuilder(account, { fee: BASE_FEE })
     .setNetworkPassphrase(Networks.TESTNET)
     .setSorobanData(new SorobanDataBuilder().setReadWrite([instance]).build())
@@ -63,6 +73,8 @@ import {
   } else {
     throw sendResponse.errorResult;
   }
+
+  ///////////////////
 
   //   const rpc = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
   //   const sentinelSecretKey =

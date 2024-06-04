@@ -14,6 +14,8 @@ import {
 } from '@stellar/stellar-sdk';
 import { spawn } from 'child_process';
 import process from 'process';
+// @ts-ignore
+import StellarHDWallet from 'stellar-hd-wallet';
 
 import { Network, NetworkMetadatas, PoolMetadata } from './network';
 
@@ -149,4 +151,9 @@ export const cmd = async (command: string) => {
 export const decodeScValString = (buffer: number[]) => {
   const text = scValToNative(xdr.ScVal.scvString(Buffer.from(buffer)));
   console.log('text', text);
+};
+
+export const genKeypairFromMnemonic = (mnemonic: string) => {
+  const wallet = StellarHDWallet.fromMnemonic(mnemonic);
+  return Keypair.fromSecret(wallet.getSecret(0));
 };
