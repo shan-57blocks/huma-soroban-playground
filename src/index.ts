@@ -13,6 +13,7 @@ import { enablePool, getPoolManagerInfo } from './poolManager';
 import {
   Accounts,
   decodeScValString,
+  genContracts,
   genKeypairFromMnemonic
 } from './utils/common';
 import {
@@ -48,18 +49,15 @@ import {
 } from '@huma-shan/soroban-sdk';
 
 (async () => {
-  const keypair = genKeypairFromMnemonic(
-    'eight comic banner genuine exit affair desert okay can short seed crater'
-  );
-
-  console.log('secretKey', keypair.secret());
-
-  const wallet = new StellarWallet(
-    'SB2EYCOYEITOLL5NTD5ADVHFLZWPMQCMAZ33R4FP5GS3KLG3TA63WKPO'
-  );
+  // const keypair = genKeypairFromMnemonic(
+  //   'eight comic banner genuine exit affair desert okay can short seed crater'
+  // );
+  // console.log('secretKey', keypair.secret());
+  // const wallet = new StellarWallet(
+  //   'SB2EYCOYEITOLL5NTD5ADVHFLZWPMQCMAZ33R4FP5GS3KLG3TA63WKPO'
+  // );
   //100 USDC. Stellar USDC's decimal is 7
   // const borrowAmount = 10_0000000n;
-
   // const drawdownResult = await drawdown(
   //   POOL_NAME.Arf,
   //   StellarNetwork.localnet,
@@ -70,7 +68,6 @@ import {
   // console.log(
   //   `Drawdown success. Tx hash: ${drawdownResult.sendTransactionResponse?.hash}`
   // );
-
   // const paymentAmount = 100_0000000n;
   // const makePaymentResult = await makePayment(
   //   POOL_NAME.Arf,
@@ -82,7 +79,6 @@ import {
   // console.log(
   //   `Payment success. Tx hash: ${makePaymentResult.sendTransactionResponse?.hash}`
   // );
-
   // await getUnderlyingToken(Network.futurenet);
   // await setFeeStructure();
   // await drawdown();
@@ -165,7 +161,6 @@ import {
   // const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
   // const entries = await server.getLedgerEntries(keys);
   // console.log(JSON.stringify(entries));
-
   // const getLedgerKeySymbol = (contractId: string) => {
   //   const instance = new Contract(contractId).getFootprint();
   //   return instance;
@@ -176,4 +171,6 @@ import {
   // const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
   // const entries = await server.getLedgerEntries(keys);
   // console.log(JSON.stringify(entries));
+
+  genContracts();
 })();

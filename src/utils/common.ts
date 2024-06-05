@@ -157,3 +157,55 @@ export const genKeypairFromMnemonic = (mnemonic: string) => {
   const wallet = StellarHDWallet.fromMnemonic(mnemonic);
   return Keypair.fromSecret(wallet.getSecret(0));
 };
+
+export const genContracts = () => {
+  const contractsStr = `huma_config_contract_id =
+    CCVOWPMIRXC77EGSFOSKZQI34737UFLKYOMSV72RN2IPFNDEYMPN6QCR;
+  pool_storage_contract_id =
+    CBWVXH4CYWQFDAI26FQFSEMDPJUMNZ3RVIJWJXVFK4N3CB563Q6HMF7S;
+  pool_contract_id = CA7YDLH3MN23PBQIXFXO6DYKWTCBIVS7WC2N4RQXOKO5KM27CM2BTJGT;
+  pool_manager_contract_id =
+    CARLNZ3NYWYOV2T6QRMZKNNDXTPU4O3KJ4MGSM3ZFKITZOEWD7A3Q7BH;
+  credit_contract_id = CAH7FTMJW3FZJPCWO6QPQJFKNM647JJYXZ6U4ZUGMO5V4UVT57XYE6JD;
+  credit_manager_contract_id =
+    CBOUPUZNWER345C3AGDWP43EO63RGZ4ZRWDKSKL43MVDGRES5EAUHQSD;
+  credit_storage_contract_id =
+    CA2FYGZO5IJGMW354LI4H6HMMLQZIDUYHHFE6J4BCNKK2WQAQ7H4ZKNJ;
+  junior_tranche_contract_id =
+    CDX6U4FJDOFL6NLTUCFMJWIOUZQDVSNRNNYKCEEKUWQQ2MGZ4PAKP2JQ;
+  senior_tranche_contract_id =
+    CAWF6KJIWYCI2WY5OL47C6DAEHP7P7GPQ42WHW6PSUNHMFHYJ6S7MOKF;`;
+
+  const borrowerSecret =
+    'SCI5F2GB2JCHFKDOWGMRCQX3EITKFUWSBW6EZAK27DAJRG2TE5HSCKCN';
+
+  const nameMap = {
+    huma_config_contract_id: 'humaConfig',
+    pool_storage_contract_id: 'poolStorage',
+    pool_contract_id: 'pool',
+    pool_manager_contract_id: 'poolManager',
+    credit_contract_id: 'poolCredit',
+    credit_manager_contract_id: 'creditManager',
+    credit_storage_contract_id: 'creditStorage',
+    junior_tranche_contract_id: 'juniorTranche',
+    senior_tranche_contract_id: 'seniorTranche'
+  };
+
+  const contracts = contractsStr
+    .replace(/ /g, '')
+    .replace(/\n/g, '')
+    .split(';');
+
+  // @ts-ignore
+  const result = { contracts: {}, borrowers: [] };
+  contracts.forEach((contract) => {
+    if (contract === '') return;
+    const [key, value] = contract.split('=');
+    // @ts-ignore
+    result.contracts[nameMap[key]] = value;
+  });
+
+  result.borrowers = [Keypair.fromSecret(borrowerSecret).publicKey()];
+
+  console.log(result);
+};
