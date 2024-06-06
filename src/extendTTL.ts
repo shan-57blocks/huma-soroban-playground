@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
-  Account,
+  Address,
   BASE_FEE,
   Contract,
   Keypair,
@@ -11,7 +12,7 @@ import {
   xdr
 } from '@stellar/stellar-sdk';
 
-(async () => {
+export const extendInstanceTTL = async () => {
   const humaConfigContract =
     'CAHPEHOIZIIMMTFCZOYEXDKHXJZ2QDYLRD3SF2AZTXWAUV4OWKGHPDCL';
   const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
@@ -22,20 +23,9 @@ import {
   const sequence = await server
     .getLatestLedger()
     .then(({ sequence }) => sequence);
-  console.log('sequence', sequence);
   const le = await server.getLedgerEntries(instance);
-  console.log(
-    'le.entries[0].liveUntilLedgerSeq',
-    le.entries[0].liveUntilLedgerSeq
-  );
 
-  console.log('signer.publicKey()', signer.publicKey());
   const account = await server.getAccount(signer.publicKey());
-  console.log(5555, le.entries[0].liveUntilLedgerSeq);
-  console.log(
-    'sequence + (3110400 - (le.entries[0].liveUntilLedgerSeq! - sequence))',
-    sequence + (3110400 - (le.entries[0].liveUntilLedgerSeq! - sequence))
-  );
   const restoreTx = new TransactionBuilder(account, { fee: BASE_FEE })
     .setNetworkPassphrase(Networks.TESTNET)
     .setSorobanData(new SorobanDataBuilder().setReadWrite([instance]).build())
@@ -73,50 +63,80 @@ import {
   } else {
     throw sendResponse.errorResult;
   }
+};
 
-  ///////////////////
+export const extendPersistentTTL = async () => {
+  const juniorTranche =
+    'CAEZEGVK2FNDQSAA7KNMMPU6BS5YVW5DMWHMBPCS3EZYVMRCECWJSWAW';
+  const lender = 'GBWOHPLK53VVKNEV7C6O6IYN7X3OLHXDML6GVZBPEB7MTWWHPB3N7VLC';
 
-  //   const rpc = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
-  //   const sentinelSecretKey =
-  //     'SA4ZVSSCY5YY3FNHK3ERGR2O7ISMUBMPTXWFRL6SEZ5CYJ3EJQT4VJBK';
-  //   const sentinelKeypair = Keypair.fromSecret(sentinelSecretKey);
+  // console.log(
+  //   xdr.ScVal.scvVec([
+  //     xdr.ScVal.scvSymbol('ApprovedLender'),
+  //     new Address(lender).toScVal()
+  //   ]).toXDR('base64')
+  // );
 
-  //   const source = await rpc
-  //     .getAccount(sentinelKeypair.publicKey())
-  //     .then((res) => new Account(res.accountId(), res.sequenceNumber()));
-  //   const sequence = await rpc.getLatestLedger().then(({ sequence }) => sequence);
+  const getLedgerKeySymbol = () => {
+    const ledgerKey = xdr.LedgerKey.contractData(
+      new xdr.LedgerKeyContractData({
+        contract: new Address(juniorTranche).toScAddress(),
+        key: xdr.ScVal.scvVec([
+          xdr.ScVal.scvSymbol('ApprovedLender'),
+          new Address(lender).toScVal()
+        ]),
+        durability: xdr.ContractDataDurability.persistent()
+      })
+    );
+    return ledgerKey;
+  };
 
-  //   const wasm_hash =
-  //     'ffd2249433d021c6a215e08d21b834ee985e92b8e6dccb816849033fa4523ab9';
+  const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
+  const ledgerKey = getLedgerKeySymbol();
 
-  //   const lk = xdr.LedgerKey.contractCode(
-  //     new xdr.LedgerKeyContractCode({
-  //       hash: Buffer.from(wasm_hash, 'hex')
-  //     })
-  //   );
-  //   const le = await rpc.getLedgerEntries(lk);
+  const entries = await server.getLedgerEntries(ledgerKey);
+  console.log('dddddd');
+  console.log(JSON.stringify(entries));
+};
 
-  //   const txn = new TransactionBuilder(source, {
-  //     fee: '100',
-  //     networkPassphrase: Networks.TESTNET
-  //   })
-  //     .addOperation(
-  //       Operation.extendFootprintTtl({
-  //         extendTo:
-  //           sequence + (3110400 - (le.entries[0].liveUntilLedgerSeq! - sequence))
-  //       })
-  //     )
-  //     .setSorobanData(new SorobanDataBuilder().setReadOnly([lk]).build())
-  //     .setTimeout(0)
-  //     .build();
-
-  //   const simTxn = await rpc.simulateTransaction(txn);
-
-  //   if (!SorobanRpc.Api.isSimulationSuccess(simTxn)) {
-  //     throw new Error('Simulation failed');
-  //   }
-
-  //   const tx = assembleTransaction(txn, simTxn).build();
-
-  //   console.log(tx.fee);
-})();
+// const getLedgerKeySymbol = (contractId: string, symbolText: string) => {
+//   const ledgerKey = xdr.LedgerKey.contractData(
+//     new xdr.LedgerKeyContractData({
+//       contract: new Address(contractId).toScAddress(),
+//       key: xdr.ScVal.scvSymbol(symbolText),
+//       durability: xdr.ContractDataDurability.persistent()
+//     })
+//   );
+//   return ledgerKey;
+// };
+// const keys = getLedgerKeySymbol(
+//   'CCVRLKWWSYYFAEOCMLH5BT5B3SWCJSO6SMB5S3LOZ5BMKE6D6PTCXJRL',
+//   'COUNTER'
+// );
+// const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
+// const entries = await server.getLedgerEntries(keys);
+// console.log(JSON.stringify(entries));
+// const getLedgerKeySymbol = (contractId: string) => {
+//   const instance = new Contract(contractId).getFootprint();
+//   return instance;
+// };
+// const keys = getLedgerKeySymbol(
+//   'CDXI5L5EFHBW3KYY3D6JGXJTGDOG5EZAQUDAK5LWZQVH4TEUDAO7PBGU'
+// );
+// const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
+// const entries = await server.getLedgerEntries(keys);
+// console.log(JSON.stringify(entries));
+// await approveLenderByTranche(Network.testnet, 'juniorTranche');
+// decodeScValString([84, 114, 97, 110, 99, 104, 101, 73, 110, 100, 101, 120]);
+// decodeScValString([
+//   85, 110, 100, 101, 114, 108, 121, 105, 110, 103, 84, 111, 107, 101, 110
+// ]);
+// const text = xdr.ScVal.scvAddress(
+//   xdr.ScAddress.fromXDR(
+//     Buffer.from([
+//       80, 69, 205, 94, 192, 114, 154, 118, 143, 213, 173, 2, 80, 88, 82, 223,
+//       79, 2, 141, 206, 131, 14, 90, 197, 34, 9, 186, 72, 72, 59, 47, 1
+//     ])
+//   )
+// );
+// console.log('text', text);
