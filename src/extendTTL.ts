@@ -95,48 +95,5 @@ export const extendPersistentTTL = async () => {
   const ledgerKey = getLedgerKeySymbol();
 
   const entries = await server.getLedgerEntries(ledgerKey);
-  console.log('dddddd');
   console.log(JSON.stringify(entries));
 };
-
-// const getLedgerKeySymbol = (contractId: string, symbolText: string) => {
-//   const ledgerKey = xdr.LedgerKey.contractData(
-//     new xdr.LedgerKeyContractData({
-//       contract: new Address(contractId).toScAddress(),
-//       key: xdr.ScVal.scvSymbol(symbolText),
-//       durability: xdr.ContractDataDurability.persistent()
-//     })
-//   );
-//   return ledgerKey;
-// };
-// const keys = getLedgerKeySymbol(
-//   'CCVRLKWWSYYFAEOCMLH5BT5B3SWCJSO6SMB5S3LOZ5BMKE6D6PTCXJRL',
-//   'COUNTER'
-// );
-// const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
-// const entries = await server.getLedgerEntries(keys);
-// console.log(JSON.stringify(entries));
-// const getLedgerKeySymbol = (contractId: string) => {
-//   const instance = new Contract(contractId).getFootprint();
-//   return instance;
-// };
-// const keys = getLedgerKeySymbol(
-//   'CDXI5L5EFHBW3KYY3D6JGXJTGDOG5EZAQUDAK5LWZQVH4TEUDAO7PBGU'
-// );
-// const server = new SorobanRpc.Server('https://soroban-testnet.stellar.org');
-// const entries = await server.getLedgerEntries(keys);
-// console.log(JSON.stringify(entries));
-// await approveLenderByTranche(Network.testnet, 'juniorTranche');
-// decodeScValString([84, 114, 97, 110, 99, 104, 101, 73, 110, 100, 101, 120]);
-// decodeScValString([
-//   85, 110, 100, 101, 114, 108, 121, 105, 110, 103, 84, 111, 107, 101, 110
-// ]);
-// const text = xdr.ScVal.scvAddress(
-//   xdr.ScAddress.fromXDR(
-//     Buffer.from([
-//       80, 69, 205, 94, 192, 114, 154, 118, 143, 213, 173, 2, 80, 88, 82, 223,
-//       79, 2, 141, 206, 131, 14, 90, 197, 34, 9, 186, 72, 72, 59, 47, 1
-//     ])
-//   )
-// );
-// console.log('text', text);
