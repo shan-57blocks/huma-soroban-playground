@@ -17,7 +17,7 @@ import process from 'process';
 // @ts-ignore
 import StellarHDWallet from 'stellar-hd-wallet';
 
-import { Network, NetworkMetadatas, PoolMetadata } from './network';
+import { Network, NetworkMetadatas, POOL_NAME, PoolMetadata } from './network';
 
 export type XDR_BASE64 = string;
 
@@ -85,19 +85,31 @@ export const getUnixTimestamp = (): number => {
 
 export const findPoolMetadata = (
   network: Network,
-  poolName: string
+  poolName: POOL_NAME
 ): PoolMetadata => {
   const selectedNetworkMetadata = NetworkMetadatas.find(
     (metadata) => metadata.network === network
   );
-  return selectedNetworkMetadata.pools.find((pool) => pool.name === poolName);
+  return selectedNetworkMetadata.pools.find(
+    (pool) => pool.poolName === poolName
+  );
 };
 
-export const Accounts = {
-  poolOwner: Keypair.fromSecret(process.env.POOL_OWNER_SECRET_KEY),
-  deployer: Keypair.fromSecret(process.env.DEPLOYER_SECRET_KEY),
-  lender: Keypair.fromSecret(process.env.LENDER_SECRET_KEY),
-  borrower: Keypair.fromSecret(process.env.BORROWER_SECRET_KEY)
+export const Accounts: Record<
+  string,
+  {
+    poolOwner: Keypair;
+    poolOperator: Keypair;
+    lender: Keypair;
+  }
+> = {
+  [Network.humanet]: {
+    poolOwner: Keypair.fromSecret(process.env.HUMANET_POOL_OWNER_SECRET_KEY),
+    poolOperator: Keypair.fromSecret(
+      process.env.HUMANET_POOL_OPERATOR_SECRET_KEY
+    ),
+    lender: Keypair.fromSecret(process.env.HUMANET_LENDER_SECRET_KEY)
+  }
 };
 
 export const toScVal = (

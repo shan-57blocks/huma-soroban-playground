@@ -679,124 +679,100 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@huma-shan/soroban-credit-storage@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-credit-storage/-/soroban-credit-storage-0.0.6.tgz#5a80fcb210f85b3f995c25353f99f20b4edbfee6"
-  integrity sha512-aL/nb4pJDCubEr0nnFFWmYc2gwb7b1x5y1jzey+AuYctf5Abhy9KbW3rA8YiE6LFwJjmYNGD8lO8fTsjVnSCTg==
+"@huma-finance/soroban-credit-manager@^0.0.11-beta.7":
+  version "0.0.11-beta.7"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-credit-manager/-/soroban-credit-manager-0.0.11-beta.7.tgz#ca2aa43e329769f4ec9471d3445b26a220832030"
+  integrity sha512-JFYmSEI7LQB6Ych5hzzNzueLsxJQXU2s0mZzP9ZJ9QKpchk9OvnykkK9cgjVub3YzT+XvUXNiRegkYI+qm/u+w==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-huma-config@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-huma-config/-/soroban-huma-config-0.0.6.tgz#bda9a590e9af298fc49ed5740468e03900d635c3"
-  integrity sha512-CkAdS4eZpElwkVKsPYJ+/G6TM+1tpwdyisDek7Anoe4bg9nbr9qBzwN9SwT3xRUZVkjH2dbPAH2Y0p4kaIz5xA==
+"@huma-finance/soroban-credit-storage@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-credit-storage/-/soroban-credit-storage-0.0.8-beta.2.tgz#bac4643d8d0dc181b85ff1dd5577aaa61b1e3a46"
+  integrity sha512-z2+0gk3M5rkFz6gCZ5AT2+i4TQGtTgC6R1xdC666S/cz1if49eeJdLP1E4BKr8d0W5cQS6Z9aty8eSeo41FBKA==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-pool-credit@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-pool-credit/-/soroban-pool-credit-0.0.6.tgz#734240fdef15e8ae408dc0bd4aca046c817eea9f"
-  integrity sha512-b8jgZmh0TmNKXy1VDtvwffDYi5z9yQce8kkgQkOgAxfp7np/W3YTtMTSNjQTjBYltX3be1YHMbPw1vGmr//Ssg==
+"@huma-finance/soroban-huma-config@^0.0.8-beta.2", "@huma-finance/soroban-huma-config@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-huma-config/-/soroban-huma-config-0.0.8-beta.2.tgz#323ce0a177f936ed19ee2c972075dde5f171324d"
+  integrity sha512-ypfBOoZZ9BlA3gMP15I4WeYjLR58XVVcVdaWn0d32/ACjXCe0tLm8Xpcx/8eU6eI6EGsvjOd1VvjAa/yIVsgqA==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-pool-manager@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-pool-manager/-/soroban-pool-manager-0.0.6.tgz#2c4fa54cf828a291f1bba8264e07381e482b46be"
-  integrity sha512-jzrlGbML1oahJRXTubPwFSCjV4cu4Z15RkiTZacalhEcyZmSjkkxn+7dhjcXCWAimgbkOhq4+0QNSIAYoVZVaQ==
+"@huma-finance/soroban-pool-credit@^0.0.8-beta.2", "@huma-finance/soroban-pool-credit@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-pool-credit/-/soroban-pool-credit-0.0.8-beta.2.tgz#c5ad747daba5c2a1c35c944da51969c8bb61b261"
+  integrity sha512-J4bUMv5a0/DF6wOzCqWMbP9zNp25hULlLurtYeb/mZt2gEIhWr63+n+MvH1b/dfP8sDT90COWS0F8MEy9nP/Vw==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-pool-storage@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-pool-storage/-/soroban-pool-storage-0.0.6.tgz#c24cd8cf53216da0d8833d3cb8cc577159092448"
-  integrity sha512-4c5gZrZtXdlVeAJzmSZpaywhbuYvftMmjhrogUeHNTCtdnI3LQ5ee6UpQYn9tVuztm3w/JDaqMjCtwWXoSqA+g==
+"@huma-finance/soroban-pool-manager@^0.0.8-beta.2", "@huma-finance/soroban-pool-manager@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-pool-manager/-/soroban-pool-manager-0.0.8-beta.2.tgz#95cbd1c5a0ae7f81737d983b4d275c1b802c0306"
+  integrity sha512-XDzOcSxo/q0fZ8wEq1Me8yQfS5XnSu0W/3s4udVQtAnJ5x3PYNXfYBhQwS+uQzrY57VI2bOb1fHNUDlni2pP4w==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-pool@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-pool/-/soroban-pool-0.0.6.tgz#3a5ce07fb7336ae8edd00ac3d5681844851d7328"
-  integrity sha512-Q8voFjtnH5ebxRPXGek5Yqv2nFhz3ErWqkLuEnHjUrNjyFbFuWio1lJzP3d8WWgDfwSFsSIipMhSbzg40UG+EA==
+"@huma-finance/soroban-pool-storage@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-pool-storage/-/soroban-pool-storage-0.0.8-beta.2.tgz#1b0b1130e31bb783cf71312e45f9226d93128207"
+  integrity sha512-M6pjkgvgxau90lljyX9IxywfTEmJ4sZNkxFF0YRyoLAxgxBz+2DmDBMxYfDgIIYP982+gm4VSK9VoYY5bv3W2A==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma-shan/soroban-sdk@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-sdk/-/soroban-sdk-0.0.6.tgz#c2e886d29e521c5b86615a872917ea12250e6895"
-  integrity sha512-hUoGwbS8Fv8QD1gA9cZF0OL7ma0l8Q6Cp84OsQE/dmjqqdQFfhDjdKd982dpiBx2LJUSiTeBdaXD8Vrn37VfgQ==
+"@huma-finance/soroban-pool@^0.0.8-beta.2", "@huma-finance/soroban-pool@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-pool/-/soroban-pool-0.0.8-beta.2.tgz#d194bf93f7f7885b0d3b596241ae9a33feda9a69"
+  integrity sha512-T48KOSzLP7ZYH/MUfUOZGDr9ErrBM5zMf4k2yYp9h7sWdpB7h4Q2Oo435lrps7fcgszdD+7XKHT6s73wFxLQqg==
   dependencies:
-    "@huma-shan/soroban-credit-storage" "^0.0.6"
-    "@huma-shan/soroban-huma-config" "^0.0.6"
-    "@huma-shan/soroban-pool" "^0.0.6"
-    "@huma-shan/soroban-pool-credit" "^0.0.6"
-    "@huma-shan/soroban-pool-manager" "^0.0.6"
-    "@huma-shan/soroban-pool-storage" "^0.0.6"
-    "@huma-shan/soroban-tranche-vault" "^0.0.6"
+    "@stellar/freighter-api" "2.0.0"
+    "@stellar/stellar-sdk" "11.3.0"
+    buffer "6.0.3"
+
+"@huma-finance/soroban-sdk@^0.0.8-beta.2":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-sdk/-/soroban-sdk-0.0.8-beta.2.tgz#7e4029411686213ad9f78c3d692cec21a974a4ca"
+  integrity sha512-ESDxkvDa29J8UzQIQkUA7DViqenuTIJOTGu2uSO/pzJQVToG5kREQh3prY079+0R6icDvpB5J3G8QAcS2SDa8g==
+  dependencies:
+    "@huma-finance/soroban-credit-storage" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-huma-config" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-pool" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-pool-credit" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-pool-manager" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-pool-storage" "^0.0.8-beta.2+79432b6"
+    "@huma-finance/soroban-tranche-vault" "^0.0.8-beta.2+79432b6"
     "@stellar/stellar-sdk" "^12.0.0-rc.3"
     dotenv "^16.0.3"
     ts-node "^10.9.1"
     tslib "^2.5.0"
     typescript "^4.8.4"
 
-"@huma-shan/soroban-tranche-vault@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@huma-shan/soroban-tranche-vault/-/soroban-tranche-vault-0.0.6.tgz#2d308b302e00876a6efccb591fbd630af46fa5fd"
-  integrity sha512-q2xq5pZsynVuROlCS6WSpMh4nWmUirKAsO0vUn5KvZIevZvBwP5dtexY3J6X3iLAL1EF5lEA19m2QuOo29OekA==
+"@huma-finance/soroban-sep41@^0.0.11-beta.7":
+  version "0.0.11-beta.7"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-sep41/-/soroban-sep41-0.0.11-beta.7.tgz#5e2bd51ff606175fc839541ea1352505e0e0c93d"
+  integrity sha512-AzGLYsId/e0uqMk6JDvCxGtCaHBgmoAqOLa1wv7N5f+ZGyQoICmQ39MwQ+kTl8YI69kjar1VBNMceoDhxwIalw==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
     buffer "6.0.3"
 
-"@huma/humaConfig@./packages/humaConfig":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/pool@./packages/pool":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/poolCredit@./packages/poolCredit":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/poolManager@./packages/poolManager":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/trancheVault@./packages/trancheVault":
-  version "0.0.0"
-  dependencies:
-    "@stellar/freighter-api" "2.0.0"
-    "@stellar/stellar-sdk" "11.3.0"
-    buffer "6.0.3"
-
-"@huma/underlyingToken@./packages/underlyingToken":
-  version "0.0.0"
+"@huma-finance/soroban-tranche-vault@^0.0.8-beta.2", "@huma-finance/soroban-tranche-vault@^0.0.8-beta.2+79432b6":
+  version "0.0.8-beta.2"
+  resolved "https://registry.yarnpkg.com/@huma-finance/soroban-tranche-vault/-/soroban-tranche-vault-0.0.8-beta.2.tgz#5642e974e537d7ed65f691a7f54e56716e992011"
+  integrity sha512-q/13dngAZ6vq74Qlunr2H+ZI7bp4tCAxAv2TcFmsYJbCXF8I+Inrn05hqJvK5WU13C1/klVNc7LDeOt2RJA+4A==
   dependencies:
     "@stellar/freighter-api" "2.0.0"
     "@stellar/stellar-sdk" "11.3.0"
