@@ -36,7 +36,7 @@
     "@huma/poolManager": "./packages/poolManager",
     "@huma/trancheVault": "./packages/trancheVault",
     "@huma/underlyingToken": "./packages/underlyingToken",
-    "@stellar/stellar-sdk": "^12.0.0-rc.2",
+    "@stellar/stellar-sdk": "^12.0.1",
     "axios": "^1.4.0",
     "dotenv": "^8.2.0",
     "ethers": "5.7.2",
