@@ -1,4 +1,10 @@
-import { extendInstanceTTL, restoreInstanceTTL } from './extendTTL';
+import axios from 'axios';
+import {
+  extendInstanceTTL,
+  extendPersistentTTL,
+  restoreInstanceTTL
+} from './extendTTL';
+import { genContracts } from './utils/common';
 import { Network, POOL_NAME } from './utils/network';
 
 (async () => {
@@ -8,8 +14,8 @@ import { Network, POOL_NAME } from './utils/network';
   // const lender = 'GBK62KZMUVEKLGGB3UYCRUP2BVDUE6UEZWUHPUNJ54BKFDTW4CNSF6O7';
   // await approveLender(network, poolName, lender);
 
-  await extendInstanceTTL(network, poolName);
   // await restoreInstanceTTL(network, poolName);
+  await extendInstanceTTL(network, poolName);
   // await extendPersistentTTL(network, poolName);
   // await restoreAndExtendInstanceTTL(network, poolName);
 })();

@@ -20,6 +20,7 @@ import {
   POOL_NAME,
   PublicRpcUrl
 } from './utils/network';
+import { getPoolStorageClient } from './utils/client';
 
 const getLedgerKey = (contract: string, key: xdr.ScVal) => {
   const ledgerKey = xdr.LedgerKey.contractData(
@@ -140,6 +141,40 @@ export const extendInstanceTTL = async (
   }
 };
 
+export const getLedgers = async (network: Network, poolName: POOL_NAME) => {
+  const { contracts } = findPoolMetadata(network, poolName);
+  console.log('contracts.poolStorage', contracts.poolStorage);
+
+  const poolStorageClient = getPoolStorageClient(
+    network,
+    poolName,
+    Accounts[network].poolOwner.publicKey()
+  );
+
+  const { result: underlyingToken } =
+    await poolStorageClient.get_underlying_token();
+  console.log('underlyingToken', underlyingToken);
+
+  return {
+    humaConfig: [
+      {
+        symbol: 'Pauser',
+        address: Accounts[network].humaOwner.publicKey()
+      },
+      {
+        symbol: 'ValidLiquidityAsset',
+        address: underlyingToken
+      }
+    ],
+    poolStorage: [
+      {
+        symbol: 'PoolOperator',
+        address: Accounts[network].poolOperator.publicKey()
+      }
+    ]
+  };
+};
+
 export const extendPersistentTTL = async (
   network: Network,
   poolName: POOL_NAME
@@ -148,20 +183,53 @@ export const extendPersistentTTL = async (
   const server = new SorobanRpc.Server(PublicRpcUrl[network]);
   const signer = Accounts[network].poolOwner;
 
-  const key = xdr.ScVal.scvVec([
-    xdr.ScVal.scvSymbol('ApprovedLender'),
-    new Address(Accounts[network].lender.publicKey()).toScVal()
-  ]);
+  // const key = xdr.ScVal.scvVec([
+  //   xdr.ScVal.scvSymbol('UnderlyingToken'),
+  //   new Address(
+  //     'CDNSM7KR4QPK7ASBJLQKA4HIA3EWVNHKWZQH2NMVFDXW2H77UZCMWOHX'
+  //   ).toScVal()
+  // ]);
 
-  const ledgerEntries = await server.getLedgerEntries(
-    getLedgerKey(contracts.juniorTranche, key)
-  );
-  console.log('****************');
-  console.log('Current ledger number: ', ledgerEntries.latestLedger);
-  console.log(
-    `liveUntilLedgerSeq before extend: `,
-    ledgerEntries.entries[0].liveUntilLedgerSeq
-  );
+  // const instance = new Contract(contracts.poolStorage).getFootprint();
+
+  // const ledgerEntries = await server.getLedgerEntries(
+  //   // @ts-ignore
+  //   // getLedgerKey(contracts.poolStorage, key)
+  //   instance
+  // );
+
+  // console.log('****************');
+  // console.log('ledger', JSON.stringify(ledgerEntries));
+
+  // return;
+
+  const ledgers = await getLedgers(network, poolName);
+  for (const contract of Object.keys(ledgers)) {
+    // @ts-ignore
+    for (const ledger of ledgers[contract]) {
+      console.log('****************');
+      console.log('ledger', ledger);
+      const key = xdr.ScVal.scvVec([
+        xdr.ScVal.scvSymbol(ledger.symbol),
+        new Address(ledger.address).toScVal()
+      ]);
+
+      const ledgerEntries = await server.getLedgerEntries(
+        // @ts-ignore
+        getLedgerKey(contracts[contract], key)
+      );
+      if (ledgerEntries.entries.length > 0) {
+        console.log('ledger entries: ', ledgerEntries);
+        console.log('Current ledger number: ', ledgerEntries.latestLedger);
+        console.log(
+          `liveUntilLedgerSeq before extend: `,
+          ledgerEntries.entries[0]?.liveUntilLedgerSeq
+        );
+      } else {
+        console.log(`No ledger entries for ${contract} ${ledger.symbol}`);
+      }
+    }
+  }
 
   // for (const contract of Object.keys(contracts)) {
   //   // @ts-ignore

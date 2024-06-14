@@ -98,9 +98,10 @@ export const findPoolMetadata = (
 export const Accounts: Record<
   string,
   {
-    poolOwner: Keypair;
-    poolOperator: Keypair;
-    lender: Keypair;
+    poolOwner?: Keypair;
+    poolOperator?: Keypair;
+    lender?: Keypair;
+    humaOwner?: Keypair;
   }
 > = {
   [Network.humanet]: {
@@ -108,7 +109,11 @@ export const Accounts: Record<
     poolOperator: Keypair.fromSecret(
       process.env.HUMANET_POOL_OPERATOR_SECRET_KEY
     ),
-    lender: Keypair.fromSecret(process.env.HUMANET_LENDER_SECRET_KEY)
+    lender: Keypair.fromSecret(process.env.HUMANET_LENDER_SECRET_KEY),
+    humaOwner: Keypair.fromSecret(process.env.HUMANET_POOL_OPERATOR_SECRET_KEY)
+  },
+  [Network.testnet]: {
+    poolOwner: Keypair.fromSecret(process.env.TESTNET_POOL_OWNER_SECRET_KEY)
   }
 };
 
@@ -171,22 +176,15 @@ export const genKeypairFromMnemonic = (mnemonic: string) => {
 };
 
 export const genContracts = () => {
-  const contractsStr = `huma_config_contract_id =
-    CCVOWPMIRXC77EGSFOSKZQI34737UFLKYOMSV72RN2IPFNDEYMPN6QCR;
-  pool_storage_contract_id =
-    CBWVXH4CYWQFDAI26FQFSEMDPJUMNZ3RVIJWJXVFK4N3CB563Q6HMF7S;
-  pool_contract_id = CA7YDLH3MN23PBQIXFXO6DYKWTCBIVS7WC2N4RQXOKO5KM27CM2BTJGT;
-  pool_manager_contract_id =
-    CARLNZ3NYWYOV2T6QRMZKNNDXTPU4O3KJ4MGSM3ZFKITZOEWD7A3Q7BH;
-  credit_contract_id = CAH7FTMJW3FZJPCWO6QPQJFKNM647JJYXZ6U4ZUGMO5V4UVT57XYE6JD;
-  credit_manager_contract_id =
-    CBOUPUZNWER345C3AGDWP43EO63RGZ4ZRWDKSKL43MVDGRES5EAUHQSD;
-  credit_storage_contract_id =
-    CA2FYGZO5IJGMW354LI4H6HMMLQZIDUYHHFE6J4BCNKK2WQAQ7H4ZKNJ;
-  junior_tranche_contract_id =
-    CDX6U4FJDOFL6NLTUCFMJWIOUZQDVSNRNNYKCEEKUWQQ2MGZ4PAKP2JQ;
-  senior_tranche_contract_id =
-    CAWF6KJIWYCI2WY5OL47C6DAEHP7P7GPQ42WHW6PSUNHMFHYJ6S7MOKF;`;
+  const contractsStr = `huma_config_contract_id=CDLGSXVG53KX2PCZDQCCDRJZSOXY65NHSII77UMJYYLTPI5RAN3HBZXY;
+pool_storage_contract_id=CDAB3OLEOT2YF53FELUAK4ILLCHMGU5P55LALVEPLRCZAS5722UHXN5G;
+pool_contract_id=CC4YZOXDN4Q2SROYIYSMCUBYK6LDF6UQXZNRTV2E53NSTLBO7AW5M2DI;
+pool_manager_contract_id=CDHL2WHRDXRFBGVQXBOVGZV65S6GIB3B7RVZVPFVFSDHTG5WXUDNIB2Q;
+credit_contract_id=CDEQGVT66H7DF2E7S2C66S4ZQWMLSCQ4LJP4P35XQRIDPM2UR54Q6MV6;
+credit_manager_contract_id=CDBDXAGBOSPOLMOFK5EP25WPDPLH4PJJ7EQARXB3ZRNLMHP2BNMZ63PQ;
+credit_storage_contract_id=CDAI2N5CP25QVYT4BTAQRTD3WJU2EJFX7KOYCJBBM6NA33NHO3JXVEUA;
+junior_tranche_contract_id=CAVILKLJ752I7OXXCL3HXHMYP4ELACFQ55GOSLBLI33GGENNSUP3LICF;
+senior_tranche_contract_id=CBEO5JQ3FQJZY32D6VU4URASZDPBKSXBNAWSTI57MJCJWTHXRWRELMNK`;
 
   const borrowerSecret =
     'SCI5F2GB2JCHFKDOWGMRCQX3EITKFUWSBW6EZAK27DAJRG2TE5HSCKCN';

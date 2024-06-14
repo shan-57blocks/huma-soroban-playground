@@ -1,3 +1,5 @@
+import { Accounts } from './common';
+
 export enum Network {
   testnet = 'testnet',
   mainnet = 'mainnet',
@@ -44,6 +46,17 @@ export type PoolMetadata = {
     seniorTranche: string;
     juniorTranche: string;
   };
+  ledgers?: {
+    humaConfig?: any[];
+    poolStorage?: any[];
+    pool?: any[];
+    poolManager?: any[];
+    poolCredit?: any[];
+    creditManager?: any[];
+    creditStorage?: any[];
+    seniorTranche?: any[];
+    juniorTranche?: any[];
+  };
 };
 
 export type NetworkMetadata = {
@@ -54,36 +67,6 @@ export type NetworkMetadata = {
 };
 
 export const NetworkMetadatas: NetworkMetadata[] = [
-  {
-    network: Network.testnet,
-    networkPassphrase: NetworkPassphrase.testnet,
-    rpcUrl: PublicRpcUrl.testnet,
-    pools: [
-      {
-        poolName: POOL_NAME.Arf,
-        poolType: POOL_TYPE.Creditline,
-        contracts: {
-          humaConfig:
-            'CAHPEHOIZIIMMTFCZOYEXDKHXJZ2QDYLRD3SF2AZTXWAUV4OWKGHPDCL',
-          poolStorage:
-            'CDL3YWC2SMRK363QPS4AR5TGVFESE3FMIPOGHEQBMJJA3RTQQ2ALW73U',
-          pool: 'CCUM2YAJM3EY2RTFMX5P6PDBT7ZZWPNNQLMW4CGIGQJKLTLT7J2SMAMV',
-          poolManager:
-            'CDPNNXOD6LVIXD2VYAH6CKQ6TPQYDITGJ4END7LFLR7OIZNHLCWLF347',
-          poolCredit:
-            'CCRLVVJOUF5MHMKJ36YWRCKPK7YUVDHA7ZNEL6EDSU2LUDHIOMN65S5G',
-          creditManager:
-            'CASGH7RO7Q4H3JOMACIFKIVZDIL7AFHYELXB5JQ6VWTMQ7IMO6GEBRQ5',
-          creditStorage:
-            'CAWXNUPJVXSPZ4WSWURNYYPECL3GDPLLP7LSSBMRXMDGWZ4ZXNIHMITS',
-          juniorTranche:
-            'CAX7J3ZANVPKCW4YSTWUBOUNO667MLH2FQGDURE4RPPI5BWPAO6WCSKZ',
-          seniorTranche:
-            'CAX34UNMKDDDO7IFQO7VZ43UYYWLUILLMU52HDGBBDQFYGQQUCYASOWH'
-        }
-      }
-    ]
-  },
   {
     network: Network.humanet,
     networkPassphrase: NetworkPassphrase.humanet,
@@ -110,6 +93,36 @@ export const NetworkMetadatas: NetworkMetadata[] = [
             'CDX6U4FJDOFL6NLTUCFMJWIOUZQDVSNRNNYKCEEKUWQQ2MGZ4PAKP2JQ',
           seniorTranche:
             'CAWF6KJIWYCI2WY5OL47C6DAEHP7P7GPQ42WHW6PSUNHMFHYJ6S7MOKF'
+        }
+      }
+    ]
+  },
+  {
+    network: Network.testnet,
+    networkPassphrase: NetworkPassphrase.testnet,
+    rpcUrl: PublicRpcUrl.testnet,
+    pools: [
+      {
+        poolName: POOL_NAME.Arf,
+        poolType: POOL_TYPE.Creditline,
+        contracts: {
+          humaConfig:
+            'CDLGSXVG53KX2PCZDQCCDRJZSOXY65NHSII77UMJYYLTPI5RAN3HBZXY',
+          poolStorage:
+            'CDAB3OLEOT2YF53FELUAK4ILLCHMGU5P55LALVEPLRCZAS5722UHXN5G',
+          pool: 'CC4YZOXDN4Q2SROYIYSMCUBYK6LDF6UQXZNRTV2E53NSTLBO7AW5M2DI',
+          poolManager:
+            'CDHL2WHRDXRFBGVQXBOVGZV65S6GIB3B7RVZVPFVFSDHTG5WXUDNIB2Q',
+          poolCredit:
+            'CDEQGVT66H7DF2E7S2C66S4ZQWMLSCQ4LJP4P35XQRIDPM2UR54Q6MV6',
+          creditManager:
+            'CDBDXAGBOSPOLMOFK5EP25WPDPLH4PJJ7EQARXB3ZRNLMHP2BNMZ63PQ',
+          creditStorage:
+            'CDAI2N5CP25QVYT4BTAQRTD3WJU2EJFX7KOYCJBBM6NA33NHO3JXVEUA',
+          juniorTranche:
+            'CAVILKLJ752I7OXXCL3HXHMYP4ELACFQ55GOSLBLI33GGENNSUP3LICF',
+          seniorTranche:
+            'CBEO5JQ3FQJZY32D6VU4URASZDPBKSXBNAWSTI57MJCJWTHXRWRELMNK'
         }
       }
     ]
