@@ -1,5 +1,3 @@
-import { Accounts } from './common';
-
 export enum Network {
   testnet = 'testnet',
   mainnet = 'mainnet',
@@ -46,17 +44,7 @@ export type PoolMetadata = {
     seniorTranche: string;
     juniorTranche: string;
   };
-  ledgers?: {
-    humaConfig?: any[];
-    poolStorage?: any[];
-    pool?: any[];
-    poolManager?: any[];
-    poolCredit?: any[];
-    creditManager?: any[];
-    creditStorage?: any[];
-    seniorTranche?: any[];
-    juniorTranche?: any[];
-  };
+  borrowers: string[];
 };
 
 export type NetworkMetadata = {
@@ -77,23 +65,24 @@ export const NetworkMetadatas: NetworkMetadata[] = [
         poolType: POOL_TYPE.Creditline,
         contracts: {
           humaConfig:
-            'CCVOWPMIRXC77EGSFOSKZQI34737UFLKYOMSV72RN2IPFNDEYMPN6QCR',
+            'CD35X6V3O5BVFWYGETHIHRWPJIWYIA3MYHHULBUJLMD4INX6Y34DW3EG',
           poolStorage:
-            'CBWVXH4CYWQFDAI26FQFSEMDPJUMNZ3RVIJWJXVFK4N3CB563Q6HMF7S',
-          pool: 'CA7YDLH3MN23PBQIXFXO6DYKWTCBIVS7WC2N4RQXOKO5KM27CM2BTJGT',
+            'CARX3M7LZM4QPPR65OGGY36GKEVD2LNV6I7IMB5EHE77XUAQXZHTKX6S',
+          pool: 'CBB6RMWO2YBVSV66ZTBXZWEWKEFTFDP4K5YPV6KEMVZN26DNDXQI3JEO',
           poolManager:
-            'CARLNZ3NYWYOV2T6QRMZKNNDXTPU4O3KJ4MGSM3ZFKITZOEWD7A3Q7BH',
+            'CB6OOMIMGLDYYPI7QEJFKMNZEBMAZG5IF2SK7VTL5B4KE2KJVYKIIZOS',
           poolCredit:
-            'CAH7FTMJW3FZJPCWO6QPQJFKNM647JJYXZ6U4ZUGMO5V4UVT57XYE6JD',
+            'CBB2X44GZCH2NMW7HQ53PAURLKQT2DOZVIQ3PWYY3YGQIOOUNAV5QACI',
           creditManager:
-            'CBOUPUZNWER345C3AGDWP43EO63RGZ4ZRWDKSKL43MVDGRES5EAUHQSD',
+            'CBN6JIEPA4QQKANLMEUICLK24NBEWIG7TPIRGEXDT32WHYLBNHQU67CR',
           creditStorage:
-            'CA2FYGZO5IJGMW354LI4H6HMMLQZIDUYHHFE6J4BCNKK2WQAQ7H4ZKNJ',
+            'CBXVWUFZU65MJZWFDMZSRSA6LPRVAUSOYCMVC3YJJXX32TH35MXUZJTN',
           juniorTranche:
-            'CDX6U4FJDOFL6NLTUCFMJWIOUZQDVSNRNNYKCEEKUWQQ2MGZ4PAKP2JQ',
+            'CBWSIQMVG5VVUBTRFGAAXNZQ4AMRVYK2VN3346EP3JYPDZXT6VEOQEK2',
           seniorTranche:
-            'CAWF6KJIWYCI2WY5OL47C6DAEHP7P7GPQ42WHW6PSUNHMFHYJ6S7MOKF'
-        }
+            'CBSPGT3IW3PS2CIKVHZKPNA2KZP6EAXFZ3AH4LQ6HN252GGJKBNSIUAW'
+        },
+        borrowers: ['GCEXEXXG3RIQ67GXHA4I6CKQWDYGSAZYJNS4VU66O75F5KFV45GACQS6']
       }
     ]
   },
@@ -123,7 +112,8 @@ export const NetworkMetadatas: NetworkMetadata[] = [
             'CAVILKLJ752I7OXXCL3HXHMYP4ELACFQ55GOSLBLI33GGENNSUP3LICF',
           seniorTranche:
             'CBEO5JQ3FQJZY32D6VU4URASZDPBKSXBNAWSTI57MJCJWTHXRWRELMNK'
-        }
+        },
+        borrowers: []
       }
     ]
   }

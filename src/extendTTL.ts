@@ -10,6 +10,7 @@ import {
   SorobanRpc,
   Transaction,
   TransactionBuilder,
+  scValToNative,
   xdr
 } from '@stellar/stellar-sdk';
 
@@ -20,7 +21,7 @@ import {
   POOL_NAME,
   PublicRpcUrl
 } from './utils/network';
-import { getPoolStorageClient } from './utils/client';
+import { getCreditStorageClient, getPoolStorageClient } from './utils/client';
 
 const getLedgerKey = (contract: string, key: xdr.ScVal) => {
   const ledgerKey = xdr.LedgerKey.contractData(
@@ -142,37 +143,58 @@ export const extendInstanceTTL = async (
 };
 
 export const getLedgers = async (network: Network, poolName: POOL_NAME) => {
-  const { contracts } = findPoolMetadata(network, poolName);
-  console.log('contracts.poolStorage', contracts.poolStorage);
+  const { contracts, borrowers } = findPoolMetadata(network, poolName);
 
   const poolStorageClient = getPoolStorageClient(
     network,
     poolName,
     Accounts[network].poolOwner.publicKey()
   );
+  const creditStorageClient = getCreditStorageClient(
+    network,
+    poolName,
+    Accounts[network].poolOwner.publicKey()
+  );
 
-  const { result: underlyingToken } =
-    await poolStorageClient.get_underlying_token();
-  console.log('underlyingToken', underlyingToken);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any = {};
 
-  return {
-    humaConfig: [
-      {
-        symbol: 'Pauser',
-        address: Accounts[network].humaOwner.publicKey()
-      },
-      {
-        symbol: 'ValidLiquidityAsset',
-        address: underlyingToken
-      }
-    ],
-    poolStorage: [
-      {
-        symbol: 'PoolOperator',
-        address: Accounts[network].poolOperator.publicKey()
-      }
-    ]
-  };
+  // humaConfig
+  // const { result: underlyingToken } =
+  //   await poolStorageClient.get_underlying_token();
+  // result.humaConfig = [
+  //   {
+  //     symbol: 'Pauser',
+  //     address: Accounts[network].humaOwner.publicKey()
+  //   },
+  //   {
+  //     symbol: 'ValidLiquidityAsset',
+  //     address: underlyingToken
+  //   }
+  // ];
+
+  // // poolStorage
+  // result.poolStorage = [
+  //   {
+  //     symbol: 'PoolOperator',
+  //     address: Accounts[network].poolOperator.publicKey()
+  //   }
+  // ];
+
+  // creditStorage
+  result.creditStorage = [];
+  for (const borrower of borrowers) {
+    const { result: creditHash } = await creditStorageClient.get_credit_hash({
+      borrower
+    });
+
+    result.creditStorage.push({
+      symbol: 'CreditConfig',
+      address: creditHash
+    });
+  }
+
+  return result;
 };
 
 export const extendPersistentTTL = async (
@@ -211,7 +233,8 @@ export const extendPersistentTTL = async (
       console.log('ledger', ledger);
       const key = xdr.ScVal.scvVec([
         xdr.ScVal.scvSymbol(ledger.symbol),
-        new Address(ledger.address).toScVal()
+        xdr.ScVal.scvBytes(ledger.address)
+        // new Address(ledger.address).toScVal()
       ]);
 
       const ledgerEntries = await server.getLedgerEntries(
@@ -264,4 +287,26 @@ export const extendPersistentTTL = async (
   //     ledgerEntries.entries[0].liveUntilLedgerSeq
   //   );
   // }
+};
+
+export const getInstanceLedgerKeys = async () => {
+  const rpc = new SorobanRpc.Server(PublicRpcUrl.humanet);
+  const { val, liveUntilLedgerSeq } = await rpc.getContractData(
+    'CBWVXH4CYWQFDAI26FQFSEMDPJUMNZ3RVIJWJXVFK4N3CB563Q6HMF7S',
+    xdr.ScVal.scvLedgerKeyContractInstance()
+  );
+
+  console.log('liveUntilLedgerSeq', liveUntilLedgerSeq);
+
+  val
+    .contractData()
+    .val()
+    .instance()
+    .storage()
+    ?.forEach((entry) => {
+      if (scValToNative(entry.key())[0] === 'UnderlyingToken') {
+        console.log('*******************');
+        // console.log(Buffer.from(scval(entry)).toString('base64'));
+      }
+    });
 };
