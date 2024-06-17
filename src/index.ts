@@ -2,7 +2,6 @@ import axios from 'axios';
 import {
   extendInstanceTTL,
   extendPersistentTTL,
-  getInstanceLedgerKeys,
   restoreInstanceTTL
 } from './extendTTL';
 import { genContracts } from './utils/common';
@@ -15,7 +14,7 @@ import { Keypair } from '@stellar/stellar-sdk';
 
   // console.log(
   //   Keypair.fromSecret(
-  //     'SCLLKFZ2Q6ZIDQ4E6B52PDNO6ZAKXVS5DDCCSZJJTCXA4QJ3CPTG4ENH'
+  //     'SCI4G3HRJO2OEP464IDYENTBMKBT3PDFYEK5RSVRO35ECL6X3VQ4EJOS'
   //   ).publicKey()
   // );
   // return;
@@ -26,6 +25,5 @@ import { Keypair } from '@stellar/stellar-sdk';
   // await extendInstanceTTL(network, poolName);
   await extendPersistentTTL(network, poolName);
   // await restoreAndExtendInstanceTTL(network, poolName);
-  // await getInstanceLedgerKeys();
   // genContracts();
 })();

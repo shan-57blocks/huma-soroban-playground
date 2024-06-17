@@ -45,6 +45,7 @@ export type PoolMetadata = {
     juniorTranche: string;
   };
   borrowers: string[];
+  lenders: string[];
 };
 
 export type NetworkMetadata = {
@@ -82,7 +83,15 @@ export const NetworkMetadatas: NetworkMetadata[] = [
           seniorTranche:
             'CBSPGT3IW3PS2CIKVHZKPNA2KZP6EAXFZ3AH4LQ6HN252GGJKBNSIUAW'
         },
-        borrowers: ['GCEXEXXG3RIQ67GXHA4I6CKQWDYGSAZYJNS4VU66O75F5KFV45GACQS6']
+        borrowers: [
+          'GCEXEXXG3RIQ67GXHA4I6CKQWDYGSAZYJNS4VU66O75F5KFV45GACQS6',
+          'GBK62KZMUVEKLGGB3UYCRUP2BVDUE6UEZWUHPUNJ54BKFDTW4CNSF6O7' //arf
+        ],
+        lenders: [
+          'GA2BM4VSNOWQLBYYIHJRXZHTBLQ77AWWWGI4OWMCY5KD6I3VP4HU4SQG', // pool owner
+          'GACQN6PWCCY6IERUPOC5AO5BTCASDFI6LPODWVJJWBTKHKORTOGF3X3P', // ea
+          'GBQZL46F4UXAE6HXCV53NHKID3JVJNSHGHEVZL5WG56OI5FTA6T6IPZD'
+        ]
       }
     ]
   },
@@ -113,7 +122,8 @@ export const NetworkMetadatas: NetworkMetadata[] = [
           seniorTranche:
             'CBEO5JQ3FQJZY32D6VU4URASZDPBKSXBNAWSTI57MJCJWTHXRWRELMNK'
         },
-        borrowers: []
+        borrowers: [],
+        lenders: []
       }
     ]
   }
