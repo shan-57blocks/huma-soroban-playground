@@ -7,8 +7,12 @@ import {
   Asset,
   hash,
   Keypair,
+  Memo,
+  MemoType,
   nativeToScVal,
+  Operation,
   scValToNative,
+  SorobanRpc,
   Transaction,
   xdr
 } from '@stellar/stellar-sdk';
@@ -102,6 +106,7 @@ export const Accounts: Record<
     poolOperator?: Keypair;
     lender?: Keypair;
     humaOwner?: Keypair;
+    borrower?: Keypair;
   }
 > = {
   [Network.humanet]: {
@@ -110,11 +115,12 @@ export const Accounts: Record<
       process.env.HUMANET_POOL_OPERATOR_SECRET_KEY
     ),
     lender: Keypair.fromSecret(process.env.HUMANET_LENDER_SECRET_KEY),
-    humaOwner: Keypair.fromSecret(process.env.HUMANET_HUMA_OWNER_SECRET_KEY)
+    humaOwner: Keypair.fromSecret(process.env.HUMANET_HUMA_OWNER_SECRET_KEY),
+    borrower: Keypair.fromSecret(process.env.HUMANET_BORROWER_SECRET_KEY)
+  },
+  [Network.testnet]: {
+    borrower: Keypair.fromSecret(process.env.TESTNET_BORROWER_SECRET_KEY)
   }
-  // [Network.testnet]: {
-  //   poolOwner: Keypair.fromSecret(process.env.TESTNET_POOL_OWNER_SECRET_KEY)
-  // }
 };
 
 export const toScVal = (

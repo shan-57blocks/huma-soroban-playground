@@ -1,29 +1,49 @@
-import axios from 'axios';
-import {
-  extendInstanceTTL,
-  extendPersistentTTL,
-  restoreInstanceTTL
-} from './extendTTL';
-import { genContracts } from './utils/common';
+import { Accounts, findPoolMetadata, ScValType, toScVal } from './utils/common';
 import { Network, POOL_NAME } from './utils/network';
-import { Keypair } from '@stellar/stellar-sdk';
+import { sendTransactionWithRestore } from './utils/transaction';
 
 (async () => {
   const network = Network.humanet;
   const poolName = POOL_NAME.Arf;
 
-  // console.log(
-  //   Keypair.fromSecret(
-  //     'SCI4G3HRJO2OEP464IDYENTBMKBT3PDFYEK5RSVRO35ECL6X3VQ4EJOS'
-  //   ).publicKey()
-  // );
-  // return;
-  // const lender = 'GBK62KZMUVEKLGGB3UYCRUP2BVDUE6UEZWUHPUNJ54BKFDTW4CNSF6O7';
-  // await approveLender(network, poolName, lender);
+  const poolContracts = findPoolMetadata(network, poolName).contracts;
+  const { borrower, poolOperator } = Accounts[network];
 
-  // await restoreInstanceTTL(network, poolName);
-  // await extendInstanceTTL(network, poolName);
-  await extendPersistentTTL(network, poolName);
-  // await restoreAndExtendInstanceTTL(network, poolName);
-  // genContracts();
+  // await sendTransactionWithRestore(
+  //   borrower.secret(),
+  //   network,
+  //   poolContracts.poolCredit,
+  //   'make_payment',
+  //   [
+  //     toScVal(borrower.publicKey(), ScValType.address),
+  //     toScVal(borrower.publicKey(), ScValType.address),
+  //     toScVal(1000000000, ScValType.u128)
+  //   ]
+  // );
+
+  // console.log('make_payment completed');
+
+  // await sendTransactionWithRestore(
+  //   borrower.secret(),
+  //   network,
+  //   poolContracts.poolCredit,
+  //   'drawdown',
+  //   [
+  //     toScVal(borrower.publicKey(), ScValType.address),
+  //     toScVal(1000000000, ScValType.u128)
+  //   ]
+  // );
+
+  await sendTransactionWithRestore(
+    poolOperator.secret(),
+    network,
+    poolContracts.juniorTranche,
+    'add_approved_lender',
+    [
+      toScVal(poolOperator.publicKey(), ScValType.address),
+      toScVal(borrower.publicKey(), ScValType.address)
+    ]
+  );
+
+  console.log('add_approved_lender completed');
 })();

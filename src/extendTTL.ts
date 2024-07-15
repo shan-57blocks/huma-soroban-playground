@@ -300,3 +300,59 @@ export const extendPersistentTTL = async (
     }
   }
 };
+
+export const restorePersistentTTL = async (
+  network: Network,
+  poolName: POOL_NAME
+) => {
+  try {
+    const { contracts } = findPoolMetadata(network, poolName);
+    const server = new SorobanRpc.Server(PublicRpcUrl[network]);
+    const signer = Accounts[network].poolOwner;
+
+    const ledgers = await getLedgers(network, poolName);
+    for (const contract of Object.keys(ledgers)) {
+      // @ts-ignore
+      for (const ledger of ledgers[contract]) {
+        console.log('****************');
+        console.log('ledger', ledger);
+        let value: xdr.ScVal;
+        switch (ledger.type) {
+          case 'address':
+            value = new Address(ledger.value).toScVal();
+            break;
+          case 'bytes':
+            value = xdr.ScVal.scvBytes(ledger.value);
+            break;
+        }
+        const key = xdr.ScVal.scvVec([
+          xdr.ScVal.scvSymbol(ledger.symbol),
+          value
+        ]);
+        // @ts-ignore
+        const ledgerKey = getLedgerKey(contracts[contract], key);
+        const account = await server.getAccount(signer.publicKey());
+        const restoreTx = new TransactionBuilder(account, { fee: BASE_FEE })
+          .setNetworkPassphrase(NetworkPassphrase[network])
+          .setSorobanData(
+            new SorobanDataBuilder().setReadWrite([ledgerKey]).build()
+          )
+          .addOperation(Operation.restoreFootprint({}))
+          .setTimeout(30)
+          .build();
+
+        const preparedTransaction = await server.prepareTransaction(restoreTx);
+        preparedTransaction.sign(signer);
+        await sendTransaction(server, preparedTransaction);
+
+        const ledgerEntries = await server.getLedgerEntries(ledgerKey);
+        console.log(
+          `liveUntilLedgerSeq after extend: `,
+          ledgerEntries.entries[0].liveUntilLedgerSeq
+        );
+      }
+    }
+  } catch (e) {
+    console.log(66666, e);
+  }
+};
