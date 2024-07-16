@@ -107,6 +107,7 @@ export const Accounts: Record<
     lender?: Keypair;
     humaOwner?: Keypair;
     borrower?: Keypair;
+    ea?: Keypair;
   }
 > = {
   [Network.humanet]: {
@@ -116,7 +117,8 @@ export const Accounts: Record<
     ),
     lender: Keypair.fromSecret(process.env.HUMANET_LENDER_SECRET_KEY),
     humaOwner: Keypair.fromSecret(process.env.HUMANET_HUMA_OWNER_SECRET_KEY),
-    borrower: Keypair.fromSecret(process.env.HUMANET_BORROWER_SECRET_KEY)
+    borrower: Keypair.fromSecret(process.env.HUMANET_BORROWER_SECRET_KEY),
+    ea: Keypair.fromSecret(process.env.HUMANET_EA_SECRET_KEY)
   },
   [Network.testnet]: {
     borrower: Keypair.fromSecret(process.env.TESTNET_BORROWER_SECRET_KEY)

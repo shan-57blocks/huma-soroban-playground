@@ -68,6 +68,7 @@ export const restoreTransaction = async (
 
   const restoreNeeded = SorobanRpc.Api.isSimulationRestore(simResponse);
   if (restoreNeeded) {
+    console.log('Start restore transaction');
     const { restorePreamble } = simResponse;
     const builtTransaction = new TransactionBuilder(account, {
       networkPassphrase: NetworkPassphrase[network],
@@ -89,6 +90,43 @@ export const restoreTransaction = async (
   }
 };
 
+export const extendTransaction = async (
+  sourceKey: string,
+  network: Network,
+  simResponse: SorobanRpc.Api.SimulateTransactionResponse
+) => {
+  const sourceKeypair = Keypair.fromSecret(sourceKey);
+  const server = new SorobanRpc.Server(PublicRpcUrl[network]);
+  const account = await server.getAccount(sourceKeypair.publicKey());
+
+  const restoreNeeded = SorobanRpc.Api.isSimulationRestore(simResponse);
+  if (restoreNeeded) {
+    console.log('Start extend TTL transaction');
+    const { restorePreamble } = simResponse;
+    const builtTransaction = new TransactionBuilder(account, {
+      networkPassphrase: NetworkPassphrase[network],
+      fee: restorePreamble.minResourceFee
+    })
+      .setSorobanData(restorePreamble.transactionData.build())
+      .addOperation(
+        Operation.extendFootprintTtl({
+          extendTo: 3110400 - 1
+        })
+      )
+      .setTimeout(30)
+      .build();
+
+    const preparedTransaction =
+      await server.prepareTransaction(builtTransaction);
+    preparedTransaction.sign(sourceKeypair);
+
+    const response = await server.sendTransaction(preparedTransaction);
+    const result = await handlePendingTransaction(response, server);
+    console.log('Extend TTL transaction successfully: ', response.hash);
+    return result;
+  }
+};
+
 export const sendTransaction = async (
   sourceKey: string,
   network: Network,
@@ -96,6 +134,7 @@ export const sendTransaction = async (
   method: string,
   params: xdr.ScVal[] = []
 ) => {
+  console.log('Start send transaction');
   const sourceKeypair = Keypair.fromSecret(sourceKey);
   const server = new SorobanRpc.Server(PublicRpcUrl[network]);
   const contract = new Contract(contractAddress);
@@ -111,10 +150,12 @@ export const sendTransaction = async (
   preparedTransaction.sign(sourceKeypair);
 
   const sendResponse = await server.sendTransaction(preparedTransaction);
-  return handlePendingTransaction(sendResponse, server);
+  const result = await handlePendingTransaction(sendResponse, server);
+  console.log('Send transaction successfully: ', sendResponse.hash);
+  return result;
 };
 
-export const sendTransactionWithRestore = async (
+export const sendTransactionWithRestoreAndExtendTTL = async (
   sourceKey: string,
   network: Network,
   contractAddress: string,
@@ -129,6 +170,7 @@ export const sendTransactionWithRestore = async (
     params
   );
   await restoreTransaction(sourceKey, network, simResponse);
+  await extendTransaction(sourceKey, network, simResponse);
   return await sendTransaction(
     sourceKey,
     network,
